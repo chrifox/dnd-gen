@@ -1,9 +1,10 @@
 import React from 'react'
-import PageLayout from '../components/PageLayout'
+import { PageLayout } from '../components/layout'
+import { H1 } from '../components/typography'
 
 const Home = () => (
   <PageLayout>
-    <h1>Home</h1>
+    <H1>Home</H1>
   </PageLayout>
 )
 

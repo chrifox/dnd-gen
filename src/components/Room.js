@@ -1,48 +1,8 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { createRoom } from '../../utils/createRoom'
-
-const TILE_SIZE = 54
-const BORDER_WIDTH = 2
-
-const Container = styled.div`
-  border: 1px solid #333;
-  display: flex;
-  flex-direction: column;
-  padding: ${TILE_SIZE * 1.5}px;
-`
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: ${props => props.length * TILE_SIZE}px;
-`
-
-const tileStyles = props => {
-  switch (props.value) {
-    case 0: return 'path'
-    default: return 'wall' // default is 1
-  }
-}
-
-const tileBorder = props => {
-  const { n, e, s, w } = props.options
-  return css`
-    border-top-color: rgba(100,0,0,${n ? 0.5 : 0.2});
-    border-right-color: rgba(100,0,0,${e ? 0.5 : 0.2});
-    border-bottom-color: rgba(100,0,0,${s ? 0.5 : 0.2});
-    border-left-color: rgba(100,0,0,${w ? 0.5 : 0.2});
-  `
-}
-
-const Tile = styled.div`
-  padding: ${(TILE_SIZE - BORDER_WIDTH * 2) / 2}px;
-  background: ${props => props.theme.tileColors[tileStyles(props)]};
-  border-width: ${BORDER_WIDTH}px;
-  border-style: solid;
-  ${tileBorder};
-`
-// border: ${BORDER_WIDTH}px solid rgba(0,0,0,0.3);
+import { Container, Row } from './map'
+import { Tile } from './tile'
 
 class Room extends React.Component {
   state = { room: [] }

@@ -5,6 +5,7 @@ import Router from 'next/router'
 const links = [
   { to: '/', label: 'Home' },
   { to: '/dungeon', label: 'Dungeon' },
+  { to: '/dmg-generator', label: 'DMG Generator' },
 ]
 
 const Nav = styled.nav`

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import Navbar from '../src/components/Navbar'
-import { theme } from '../theme'
+import { theme } from '../src/theme'
 
 const AppContainer = styled.div`
   min-height: 100vh;
