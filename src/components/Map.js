@@ -42,6 +42,7 @@ const RegenBtn = styled(Button)`
 const Inputs = styled.div`
 display: flex;
 flex-direction: column;
+margin-bottom: 5px;
 `
 
 const FormControl = styled.div`
@@ -63,19 +64,26 @@ const Input = styled.input`
 
 class Map extends React.Component {
   state = {
-    rows: 30,
-    columns: 30,
-    maxTunnels: 100,
-    maxLength: 5,
+    rows: 32,
+    columns: 32,
+    maxTunnels: 64,
+    maxLength: 8,
+    mapGrid: []
+  }
+
+  componentDidMount() {
+    this.newMap()
   }
 
   inputValidator = x => isNaN(Number(x)) ? 0 : x
 
   onChange = e => this.setState({ [e.target.name]: this.inputValidator(e.target.value) })
 
+  newMap = () => this.setState({ mapGrid: createMap(this.state) })
+
   render() {
-    let grid = createMap(this.state)
-    const { rows, columns, maxTunnels, maxLength } = this.state
+    const { mapGrid, ...state } = this.state
+    const { rows, columns, maxTunnels, maxLength } = state
     return (
       <>
         <Inputs>
@@ -97,10 +105,10 @@ class Map extends React.Component {
           </FormControl>
         </Inputs>
 
-        {/* <RegenBtn onClick={this.generateMap}>Regenerate</RegenBtn> */}
+        <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
 
         <Container>
-          {grid.map((row, rowIndex) => (
+          {mapGrid.map((row, rowIndex) => (
             <Row length={row.length} key={rowIndex}>
               {row.map((tile, colIndex) =>
                 <Tile
