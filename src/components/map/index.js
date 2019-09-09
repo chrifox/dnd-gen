@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
-import { TILE_SIZE } from './tile'
+import { TILE_SIZE } from '../tile'
 
 export const Container = styled.div`
-  border: 1px solid #333;
+  border: 1px solid #444;
   display: flex;
-  flex: 1;
   flex-direction: column;
-  padding: ${TILE_SIZE}px;
+  padding: ${TILE_SIZE / 2}px;
 `
 
 export const Row = styled.div`

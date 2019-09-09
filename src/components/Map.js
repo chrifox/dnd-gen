@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Button from './Button'
 import { Container, Row } from './map'
 import { Tile } from './tile'
-import { createMap } from '../../utils/createMap'
+import { createMap } from '../utils/createMap'
 
 const RegenBtn = styled(Button)`
   margin-bottom: 10px;

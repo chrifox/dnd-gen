@@ -1,21 +1,9 @@
-const TILE = {
-  n: false,
-  ne: false,
-  e: false,
-  se: false,
-  s: false,
-  sw: false,
-  w: false,
-  nw: false,
-  type: 0,
-}
-
-export const create2dArray = (rows, columns, value = TILE) => {
+export const create2dArray = (rows, columns, value = 1) => {
   let array = []
-  for (var i = 0; i < rows; i++) {
+  for (var row = 0; row < rows; row++) {
     array.push([])
-    for (var j = 0; j < columns; j++) {
-      array[i].push(TILE)
+    for (var col = 0; col < columns; col++) {
+      array[row].push(value)
     }
   }
   return array
