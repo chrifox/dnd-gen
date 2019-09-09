@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import Button from './Button'
-import { createMap } from '../../utils/tileGen'
+import { createMap } from '../../utils/createMap'
 
 const TILE_SIZE = 16
 const BORDER_WIDTH = 1
@@ -25,7 +25,7 @@ const tileStyles = props => {
     case 's': return 'start'
     case 'e': return 'end'
     case 0: return 'path'
-    default: return 'wall'
+    default: return 'wall' // default is 1
   }
 }
 
@@ -64,9 +64,9 @@ const Input = styled.input`
 
 class Map extends React.Component {
   state = {
-    rows: 32,
-    columns: 32,
-    maxTunnels: 64,
+    rows: 15,
+    columns: 60,
+    maxTunnels: 100,
     maxLength: 8,
     mapGrid: []
   }
