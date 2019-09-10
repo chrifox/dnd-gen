@@ -14,3 +14,7 @@ export const passages = [
 
   // Stairs...
 ]
+
+export const subPassages = [
+  { rows: 4, columns: 1 },
+]

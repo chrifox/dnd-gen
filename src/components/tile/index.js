@@ -21,10 +21,16 @@ const tileBorderWidth = props => {
     `, '')
 }
 
+const borderColor = (props, dir) => {
+  if (props[dir] && (props.door === dir)) return 'door'
+  if (props[dir] && (props.secretDoor === dir)) return 'secretDoor'
+  return 'grid'
+}
+
 const tileBorderColor = props => {
   return directions.reduce((style, dir) =>
     `${style}
-      border-${dir}-color: ${props.theme.tileColors[(props[dir] && (props.door === dir)) ? 'door' : 'grid']};
+      border-${dir}-color: ${props.theme.tileColors[borderColor(props, dir)]};
     `, '')
 }
 

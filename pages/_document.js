@@ -25,6 +25,9 @@ export default class MyDocument extends Document {
                 font-family: 'Muli', sans-serif;
                 font-weight: 300;
               }
+              * {
+                user-select: none;
+              }
               `}</style>
           </>
         )

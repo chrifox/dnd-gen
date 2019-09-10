@@ -9,12 +9,18 @@ export const DungeonContext = React.createContext()
 class DungeonProvider extends React.Component {
   state = {
     rooms: [],
-    changeStartingArea: () => this.changeStartingArea(),
-    addPassage: () => this.addRoom(this.generatePassage()),
+    activeLabel: null,
+    activeGenerator: () => {},
+    setGenerator: ({ generator, label }) => this.setState({ activeGenerator: generator, activeLabel: label }),
+    generators: [],
+    regenStartingArea: () => this.changeStartingArea(),
   }
 
   componentDidMount() {
     this.changeStartingArea()
+    this.setState({ generators: [
+      { fn: this.addPassage, label: 'Passage' },
+    ] })
   }
 
   changeStartingArea = () => {
@@ -31,9 +37,9 @@ class DungeonProvider extends React.Component {
 
   generateStartingArea = () => randomRoom(startingAreas)
 
-  generatePassage = () => randomRoom(passages)
-
   addRoom = room => this.setState(state => ({ rooms: state.rooms.concat(room) }))
+
+  addPassage = () => this.addRoom(randomRoom(passages))
 
   render() {
     return (

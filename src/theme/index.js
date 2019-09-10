@@ -11,5 +11,6 @@ export const theme = {
     start: '#3c3',
     end: '#c33',
     door: '#631',
+    secretDoor: '#15d',
   },
 }

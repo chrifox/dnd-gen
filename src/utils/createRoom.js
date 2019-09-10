@@ -1,4 +1,4 @@
-const createTile = ({ top, right, bottom, left, door }) => ({
+const createTile = ({ top, right, bottom, left, door, secretDoor }) => ({
   // if tile is an edge
   top,
   right,
@@ -7,12 +7,13 @@ const createTile = ({ top, right, bottom, left, door }) => ({
 
   // if tile has a door
   door, // a direction or null
+  secretDoor, // a direction or null
 
   // type of tile e.g. path or wall
   type: 0,
 })
 
-export const createRoom = ({ rows, columns, doors }) => {
+export const createRoom = ({ rows, columns, doors, secretDoor }) => {
   // initialise a room
   let room = []
 
@@ -34,14 +35,14 @@ export const createRoom = ({ rows, columns, doors }) => {
       room[row].push(tile)
     }
   }
-  room = placeDoors(room, doors)
+  room = placeDoors(room, doors, secretDoor)
   return room
 }
 
-export const placeDoors = (room, doors) => {
+const placeDoors = (room, doors, secretDoor) => {
   let chosenDoors = [],
   edges = [],
-  random
+  random = 0
 
   room.map((row, rowIndex) =>
     row.filter((tile, tileIndex) => {
@@ -52,11 +53,23 @@ export const placeDoors = (room, doors) => {
   )
 
   for (let door = 0; door < doors; door++) {
+    // choose a random edge tile
     random = Math.floor(Math.random() * edges.length)
+    // select tile for a door
     chosenDoors.push(edges[random])
+    // remove edge tile after they have been used
+    edges.pop(edges[random])
   }
 
-  chosenDoors.map(({ rowIndex, tileIndex }) => {
+  if (secretDoor && Math.random() < secretDoor) {
+    random = Math.floor(Math.random() * edges.length)
+    chosenDoors.push({
+      ...edges[random],
+      secret: true,
+    })
+  }
+
+  chosenDoors.map(({ rowIndex, tileIndex, secret }) => {
     const tile = room[rowIndex][tileIndex]
     const { top, right, bottom, left } = tile
 
@@ -64,7 +77,7 @@ export const placeDoors = (room, doors) => {
       .filter(([key, value]) => value && key)
     side = side[Math.floor(Math.random() * side.length)]
 
-    tile.door = side[0]
+    secret ? tile.secretDoor = side[0] : tile.door = side[0]
   })
 
   return room

@@ -5,6 +5,17 @@ import MapContainer from './MapContainer'
 import Button from '../../../components/Button'
 import SvgIcon from '../../../components/SvgIcon'
 import Room from '../../../components/Room'
+import { H3 } from '../../../components/typography'
+
+const RoomTypes = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const RoomTypeButton = styled(Button)`
+  padding: 0.2em 0.4em;
+  margin: 0 5px;
+`
 
 const Controls = styled.div`
   padding: 10px;
@@ -31,11 +42,27 @@ const ArrowButton = styled(Button)`
 
 const MapCreator = () => (
   <DungeonContext.Consumer>
-    {({ changeStartingArea, rooms, addPassage }) => {
+    {({
+      activeLabel,
+      activeGenerator,
+      generators,
+      setGenerator,
+      regenStartingArea,
+      setGenPassage,
+      rooms,
+    }) => {
       return (
         <Controls>
-          <RegenBtn onClick={changeStartingArea}>Starting Area</RegenBtn>
-          <RegenBtn onClick={addPassage}>New Passage</RegenBtn>
+          <RegenBtn onClick={regenStartingArea}>Starting Area</RegenBtn>
+
+          <H3>{`Active Room: ${activeLabel ? activeLabel : 'None'}`}</H3>
+          <RoomTypes>
+            {generators.map(({ fn, label }) => (
+              <RoomTypeButton key={label} onClick={() => setGenerator({ generator: fn, label })}>
+                {label}
+              </RoomTypeButton>
+            ))}
+          </RoomTypes>
 
           <ArrowButton>
             <SvgIcon name="up" />
@@ -55,7 +82,7 @@ const MapCreator = () => (
             </ArrowButton>
           </HorizontalControls>
 
-          <ArrowButton>
+          <ArrowButton onClick={() => activeGenerator()}>
             <SvgIcon name="down" />
           </ArrowButton>
         </Controls>
