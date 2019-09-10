@@ -30,6 +30,12 @@ const HorizontalControls = styled.div`
   align-items: center;
 `
 
+const RoomRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
 const RegenBtn = styled(Button)`
   margin-bottom: 10px;
 `
@@ -47,19 +53,13 @@ const MapCreator = () => (
       activeGenerator,
       generators,
       setGenerator,
-      regenStartingArea,
       setGenPassage,
       rooms,
       addRoom,
     }) => {
-      const addCurrentRoom = position => {
-        console.log(position)
-        addRoom(activeGenerator(), position)
-      }
+      const addCurrentRoom = position => activeGenerator && addRoom(activeGenerator(), position)
       return (
         <Controls>
-          <RegenBtn onClick={regenStartingArea}>Starting Area</RegenBtn>
-
           <H3>{`Active Room: ${activeLabel ? activeLabel : 'None'}`}</H3>
           <RoomTypes>
             {generators.map(({ fn, label }) => (
@@ -69,25 +69,31 @@ const MapCreator = () => (
             ))}
           </RoomTypes>
 
-          <ArrowButton onClick={() => addCurrentRoom(0)}>
+          <ArrowButton onClick={() => addCurrentRoom({ row: 0 })}>
             <SvgIcon name="up" />
           </ArrowButton>
 
-          <HorizontalControls>
-            <ArrowButton onClick={() => {}}>
-              <SvgIcon name="left" />
-            </ArrowButton>
 
             <MapContainer>
-              {rooms.map((room, i) => <Room key={i} {...room} />)}
+              {rooms.map((roomRow, rowIndex) => (
+                <HorizontalControls>
+                  <ArrowButton onClick={() => addCurrentRoom({ row: rowIndex, column: 0 })}>
+                    <SvgIcon name="left" />
+                  </ArrowButton>
+
+                  <RoomRow>
+                    {roomRow.map((room, i) => <Room key={i} {...room} />)}
+                  </RoomRow>
+
+                  <ArrowButton onClick={() => addCurrentRoom({ row: rowIndex, column: roomRow.length })}>
+                    <SvgIcon name="right" />
+                  </ArrowButton>
+                </HorizontalControls>
+              ))}
             </MapContainer>
 
-            <ArrowButton onClick={() => {}}>
-              <SvgIcon name="right" />
-            </ArrowButton>
-          </HorizontalControls>
 
-          <ArrowButton onClick={() => addCurrentRoom(rooms.length)}>
+          <ArrowButton onClick={() => addCurrentRoom({ row: rooms.length })}>
             <SvgIcon name="down" />
           </ArrowButton>
         </Controls>
