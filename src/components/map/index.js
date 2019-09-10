@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
-import { TILE_SIZE } from '../tile'
+import { TILE_SIZE, BORDER_WIDTH } from '../tile'
 
 export const Container = styled.div`
   border: 1px solid #444;
@@ -12,5 +12,4 @@ export const Container = styled.div`
 export const Row = styled.div`
   display: flex;
   flex-direction: row;
-  width: ${props => props.length * TILE_SIZE}px;
 `

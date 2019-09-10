@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 
 export const TILE_SIZE = 30
-const BORDER_WIDTH = 1
+const BORDER_WIDTH = 2
 const directions = ['top', 'right', 'bottom', 'left']
 
 const tileStyles = props => {
@@ -14,16 +14,25 @@ const tileStyles = props => {
   }
 }
 
+const tileBorderWidth = props => {
+  return directions.reduce((style, dir) =>
+    `${style}
+      border-${dir}-width: ${BORDER_WIDTH * props[dir] ? 5 : 1}px;
+    `, '')
+}
+
 const tileBorderColor = props => {
   return directions.reduce((style, dir) =>
-    `${style}border-${dir}-color: rgba(75,10,20,${props[dir] ? 0.8 : 0.1});`
-  , '')
+    `${style}
+      border-${dir}-color: ${props.theme.tileColors[(props[dir] && (props.door === dir)) ? 'door' : 'grid']};
+    `, '')
 }
 
 export const Tile = styled.div`
-  padding: ${(TILE_SIZE - BORDER_WIDTH * 2) / 2}px;
+  width: ${TILE_SIZE}px;
+  height: ${TILE_SIZE}px;
   background: ${props => props.theme.tileColors[tileStyles(props)]};
-  border-width: ${BORDER_WIDTH}px;
   border-style: solid;
+  ${tileBorderWidth};
   ${tileBorderColor};
 `

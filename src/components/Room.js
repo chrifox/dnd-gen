@@ -14,7 +14,7 @@ class Room extends React.Component {
   }
 
   newRoom = () => this.setState({
-    room: createRoom(this.props.rows, this.props.columns),
+    room: createRoom(this.props),
   })
 
   render() {
