@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Router from 'next/router'
+import Button from './Button'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -15,13 +16,8 @@ const Nav = styled.nav`
   padding: 0 5px;
 `
 
-const Link = styled.a`
-  display: inline-block;
-  color: ${props => props.theme.colors.text};
-  background: ${props => props.theme.colors.primary};
-  padding: 0.8em 1.2em;
+const Link = styled(Button)`
   margin: 0 5px;
-  cursor: pointer;
 `
 
 const Navbar = () => (

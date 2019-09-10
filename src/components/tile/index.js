@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 
-export const TILE_SIZE = 30
-const BORDER_WIDTH = 2
+export const TILE_SIZE = 20 // 1 tile = 5ft
+const BORDER_WIDTH = 1
 const directions = ['top', 'right', 'bottom', 'left']
 
 const tileStyles = props => {

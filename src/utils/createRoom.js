@@ -1,5 +1,3 @@
-import { create2dArray } from './create2dArray'
-
 const createTile = ({ top, right, bottom, left, door }) => ({
   // if tile is an edge
   top,

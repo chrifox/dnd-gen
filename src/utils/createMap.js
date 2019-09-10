@@ -2,7 +2,7 @@ import { create2dArray } from './create2dArray'
 
 export const createMap = args => {
   let { rows, columns, maxTunnels, maxLength } = args, // width and height of the map
-  map = create2dArray(rows, columns), // create a 2d array full of 1's
+  map = create2dArray(rows, columns, 1), // create a 2d array full of 1's
   currentRow = Math.floor(Math.random() * rows), // our current row - start at a random spot
   currentColumn = Math.floor(Math.random() * columns), // our current column - start at a random spot
   directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
