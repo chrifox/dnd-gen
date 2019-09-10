@@ -50,7 +50,12 @@ const MapCreator = () => (
       regenStartingArea,
       setGenPassage,
       rooms,
+      addRoom,
     }) => {
+      const addCurrentRoom = position => {
+        console.log(position)
+        addRoom(activeGenerator(), position)
+      }
       return (
         <Controls>
           <RegenBtn onClick={regenStartingArea}>Starting Area</RegenBtn>
@@ -64,12 +69,12 @@ const MapCreator = () => (
             ))}
           </RoomTypes>
 
-          <ArrowButton>
+          <ArrowButton onClick={() => addCurrentRoom(0)}>
             <SvgIcon name="up" />
           </ArrowButton>
 
           <HorizontalControls>
-            <ArrowButton>
+            <ArrowButton onClick={() => {}}>
               <SvgIcon name="left" />
             </ArrowButton>
 
@@ -77,12 +82,12 @@ const MapCreator = () => (
               {rooms.map((room, i) => <Room key={i} {...room} />)}
             </MapContainer>
 
-            <ArrowButton>
+            <ArrowButton onClick={() => {}}>
               <SvgIcon name="right" />
             </ArrowButton>
           </HorizontalControls>
 
-          <ArrowButton onClick={() => activeGenerator()}>
+          <ArrowButton onClick={() => addCurrentRoom(rooms.length)}>
             <SvgIcon name="down" />
           </ArrowButton>
         </Controls>

@@ -14,18 +14,27 @@ class DungeonProvider extends React.Component {
     setGenerator: ({ generator, label }) => this.setState({ activeGenerator: generator, activeLabel: label }),
     generators: [],
     regenStartingArea: () => this.changeStartingArea(),
+    addRoom: (room, position) => this.setState(state => {
+      const roomsStart = state.rooms.slice(0, position)
+      const roomsEnd = state.rooms.slice(position, state.rooms.length)
+      return ({ rooms: [
+        ...roomsStart,
+        room,
+        ...roomsEnd,
+      ] })
+    }),
   }
 
   componentDidMount() {
     this.changeStartingArea()
     this.setState({ generators: [
-      { fn: this.addPassage, label: 'Passage' },
+      { fn: this.generatePassage, label: 'Passage' },
     ] })
   }
 
   changeStartingArea = () => {
     if (!this.state.rooms.length) {
-      this.addRoom(this.generateStartingArea())
+      this.state.addRoom(this.generateStartingArea())
     } else {
       this.setState(state => ({
         rooms: state.rooms.map((room, i) =>
@@ -35,11 +44,9 @@ class DungeonProvider extends React.Component {
     }
   }
 
+  // Room generators
   generateStartingArea = () => randomRoom(startingAreas)
-
-  addRoom = room => this.setState(state => ({ rooms: state.rooms.concat(room) }))
-
-  addPassage = () => this.addRoom(randomRoom(passages))
+  generatePassage = () => randomRoom(passages)
 
   render() {
     return (
