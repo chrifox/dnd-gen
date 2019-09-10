@@ -60,11 +60,9 @@ export const placeDoors = (room, doors) => {
     const tile = room[rowIndex][tileIndex]
     const { top, right, bottom, left } = tile
 
-    let side = Object.entries({ top, right, bottom, left }).filter(([key, value]) => value && key)
-    // if tile is a corner randomise side selection
-    if (side.length > 1) {
-      side = Math.random() < 0.5 ? side[0] : side[1]
-    } else side = side[0]
+    let side = Object.entries({ top, right, bottom, left })
+      .filter(([key, value]) => value && key)
+    side = side[Math.floor(Math.random() * side.length)]
 
     tile.door = side[0]
   })

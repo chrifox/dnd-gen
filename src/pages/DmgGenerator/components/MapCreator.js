@@ -31,33 +31,36 @@ const ArrowButton = styled(Button)`
 
 const MapCreator = () => (
   <DungeonContext.Consumer>
-    {({ startingArea, chooseStartingArea }) => (
-      <Controls>
-        <RegenBtn onClick={chooseStartingArea}>Starting Area</RegenBtn>
-        
-        <ArrowButton>
-          <SvgIcon name="up" />
-        </ArrowButton>
-
-        <HorizontalControls>
-          <ArrowButton>
-            <SvgIcon name="left" />
-          </ArrowButton>
-
-          <MapContainer>
-            <Room {...startingArea} />
-          </MapContainer>
+    {({ changeStartingArea, rooms, addPassage }) => {
+      return (
+        <Controls>
+          <RegenBtn onClick={changeStartingArea}>Starting Area</RegenBtn>
+          <RegenBtn onClick={addPassage}>New Passage</RegenBtn>
 
           <ArrowButton>
-            <SvgIcon name="right" />
+            <SvgIcon name="up" />
           </ArrowButton>
-        </HorizontalControls>
 
-        <ArrowButton>
-          <SvgIcon name="down" />
-        </ArrowButton>
-      </Controls>
-    )}
+          <HorizontalControls>
+            <ArrowButton>
+              <SvgIcon name="left" />
+            </ArrowButton>
+
+            <MapContainer>
+              {rooms.map((room, i) => <Room key={i} {...room} />)}
+            </MapContainer>
+
+            <ArrowButton>
+              <SvgIcon name="right" />
+            </ArrowButton>
+          </HorizontalControls>
+
+          <ArrowButton>
+            <SvgIcon name="down" />
+          </ArrowButton>
+        </Controls>
+      )
+    }}
   </DungeonContext.Consumer>
 )
 

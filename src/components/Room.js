@@ -7,6 +7,12 @@ import { Tile } from './tile'
 class Room extends React.Component {
   state = { room: [] }
 
+  componentDidMount() {
+    if (this.props.rows && this.props.columns) {
+      this.newRoom()
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.rows !== this.props.rows || prevProps.columns !== this.props.columns) {
       this.newRoom()
