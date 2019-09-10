@@ -30,7 +30,6 @@ export const createRoom = ({ rows, columns, doors, secretDoor }) => {
         right: isRight,
         bottom: isBottom,
         left: isLeft,
-        door: null,
       })
       room[row].push(tile)
     }

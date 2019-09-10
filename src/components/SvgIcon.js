@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SvgIcon = ({ name, size = 30, color = '#fff' }) => {
+const SvgIcon = ({ name, size = 24, color = '#fff' }) => {
   switch (name) {
     case 'up':
     return (

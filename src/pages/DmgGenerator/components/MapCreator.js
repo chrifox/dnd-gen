@@ -33,7 +33,6 @@ const HorizontalControls = styled.div`
 const RoomRow = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
 `
 
 const RegenBtn = styled(Button)`
@@ -42,7 +41,7 @@ const RegenBtn = styled(Button)`
 
 const ArrowButton = styled(Button)`
   background: #ccc;
-  padding: 6px 8px;
+  padding: 4px 6px;
   margin: 10px;
 `
 
@@ -82,7 +81,9 @@ const MapCreator = () => (
                   </ArrowButton>
 
                   <RoomRow>
-                    {roomRow.map((room, i) => <Room key={i} {...room} />)}
+                    {roomRow.map((room, i) => (
+                      <Room key={room.key} {...room} />
+                    ))}
                   </RoomRow>
 
                   <ArrowButton onClick={() => addCurrentRoom({ row: rowIndex, column: roomRow.length })}>

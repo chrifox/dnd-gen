@@ -6,6 +6,14 @@ import { passages } from '../resources/passages'
 
 export const DungeonContext = React.createContext()
 
+let creationIndex = 0
+
+const roomKeyGen = ({ rows, columns, doors }) => {
+  creationIndex += 1
+  const key = `${doors}d${rows}x${columns}_${creationIndex}`
+  return key
+}
+
 class DungeonProvider extends React.Component {
   state = {
     rooms: [],
@@ -15,19 +23,20 @@ class DungeonProvider extends React.Component {
     generators: [],
     addRoom: (room, { row, column }) => this.setState(state => {
       let newRooms = [],
-      newRow = []
+      newRow = [],
+      newRoom = { ...room, key: roomKeyGen(room) }
       if (!column) {
-        if (row === 0) newRooms.push([room], ...state.rooms)
-        if (state.rooms.length && row === state.rooms.length) newRooms.push(...state.rooms, [room])
+        if (row === 0) newRooms.push([newRoom], ...state.rooms)
+        if (state.rooms.length && row === state.rooms.length) newRooms.push(...state.rooms, [newRoom])
       }
 
       if (column === 0) {
-        newRow.push(room, ...state.rooms[row])
+        newRow.push(newRoom, ...state.rooms[row])
         newRooms = state.rooms.map((roomRow, i) => i === row ? newRow : roomRow)
       }
 
       if (state.rooms[row] && state.rooms[row].length && column === state.rooms[row].length) {
-        newRow.push(...state.rooms[row], room)
+        newRow.push(...state.rooms[row], newRoom)
         newRooms = state.rooms.map((roomRow, i) => i === row ? newRow : roomRow)
       }
 
