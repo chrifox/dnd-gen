@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { createRoom } from '../utils/createRoom'
-import { Row } from './map'
+import { Row } from './map/index'
 import { Tile } from './tile'
 
 class Room extends React.Component {
@@ -32,6 +32,9 @@ class Room extends React.Component {
             {row.map(({ type, ...options }, colIndex) =>
               <Tile
                 key={`${rowIndex}-${colIndex}`}
+                // Position for tile styling
+                row={rowIndex + 1}
+                column={colIndex + 1}
                 value={type}
                 {...options}
               />

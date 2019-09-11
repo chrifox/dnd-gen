@@ -1,9 +1,41 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
+import Button from '../Button'
+import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 20 // 1 tile = 5ft
-const BORDER_WIDTH = 1
+export const TILE_SIZE = 24 // 1 tile = 5ft
+export const BORDER_WIDTH = 1
 const directions = ['top', 'right', 'bottom', 'left']
+
+const arrowPosition = props => {
+  let top, right, bottom, left
+  top = props.door === 'top' && -TILE_SIZE
+  right = props.door === 'right' && -TILE_SIZE + BORDER_WIDTH
+  bottom = props.door === 'bottom' && -TILE_SIZE
+  left = props.door === 'left' && -TILE_SIZE + BORDER_WIDTH
+  if (props.door === 'top' || props.door === 'bottom') {
+    // TODO: fix top and bottom arrow placement
+    left = TILE_SIZE * props.column + BORDER_WIDTH
+  }
+  return `
+    top: ${top}px;
+    right: ${right}px;
+    bottom: ${bottom}px;
+    left: ${left}px;
+  `
+}
+
+const ArrowButton = styled(Button)`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${TILE_SIZE}px;
+  height: ${TILE_SIZE}px;
+  padding: 0;
+  background: #aaa;
+  ${arrowPosition};
+`
 
 const tileStyles = props => {
   switch (props.value) {
@@ -34,7 +66,10 @@ const tileBorderColor = props => {
     `, '')
 }
 
-export const Tile = styled.div`
+const StyledTile = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: ${TILE_SIZE}px;
   height: ${TILE_SIZE}px;
   background: ${props => props.theme.tileColors[tileStyles(props)]};
@@ -42,3 +77,17 @@ export const Tile = styled.div`
   ${tileBorderWidth};
   ${tileBorderColor};
 `
+
+export const Tile = ({ children, ...props }) => (
+  <>
+    <StyledTile {...props}>
+      {children}
+    </StyledTile>
+
+    {props.door && (
+      <ArrowButton {...props} onPress={() => console.log(`Make room ${props.door}`)}>
+        <SvgIcon name={props.door} size={TILE_SIZE * 0.75} />
+      </ArrowButton>
+    )}
+  </>
+)

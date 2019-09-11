@@ -6,25 +6,30 @@ import { passages } from '../resources/passages'
 
 export const DungeonContext = React.createContext()
 
-let creationIndex = 0
+let rowCreationIndex = 0,
+roomCreationIndex = 0
+
+
+const rowKeyGen = () => {
+  rowCreationIndex += 1
+  return `row_${rowCreationIndex}`
+}
 
 const roomKeyGen = ({ rows, columns, doors }) => {
-  creationIndex += 1
-  const key = `${doors}d${rows}x${columns}_${creationIndex}`
-  return key
+  roomCreationIndex += 1
+  return `${doors}d${rows}x${columns}_${roomCreationIndex}`
 }
 
 class DungeonProvider extends React.Component {
   state = {
     rooms: [],
-    activeLabel: null,
     activeGenerator: null,
-    setGenerator: ({ generator, label }) => this.setState({ activeGenerator: generator, activeLabel: label }),
+    setGenerator: generator => this.setState({ activeGenerator: generator }),
     generators: [],
     addRoom: (room, { row, column }) => this.setState(state => {
       let newRooms = [],
       newRow = [],
-      newRoom = { ...room, key: roomKeyGen(room) }
+      newRoom = { ...room, rowKey: rowKeyGen(), key: roomKeyGen(room) }
       if (!column) {
         if (row === 0) newRooms.push([newRoom], ...state.rooms)
         if (state.rooms.length && row === state.rooms.length) newRooms.push(...state.rooms, [newRoom])
@@ -46,9 +51,12 @@ class DungeonProvider extends React.Component {
 
   componentDidMount() {
     this.state.addRoom(this.generateStartingArea(), { row: 0 })
-    this.setState({ generators: [
-      { fn: this.generatePassage, label: 'Passage' },
-    ] })
+    this.setState({
+      generators: [
+        { fn: this.generatePassage, key: 'passage' },
+      ],
+      activeGenerator: { fn: this.generatePassage, key: 'passage' },
+    })
   }
 
   // Room generators

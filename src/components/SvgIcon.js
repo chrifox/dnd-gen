@@ -1,8 +1,9 @@
 import React from 'react'
 
-const SvgIcon = ({ name, size = 24, color = '#fff' }) => {
+const SvgIcon = ({ name, size = 20, color = '#fff' }) => {
   switch (name) {
     case 'up':
+    case 'top':
     return (
       <svg width={size} height={size} viewBox="0 0 24 24">
         <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" fill={color} />
@@ -17,6 +18,7 @@ const SvgIcon = ({ name, size = 24, color = '#fff' }) => {
       </svg>
     )
     case 'down':
+    case 'bottom':
     return (
       <svg width={size} height={size} viewBox="0 0 24 24">
       <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill={color} />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import Button from './Button'
-import { Container, Row } from './map'
+import { Container, Row } from './map/index'
 import { Tile } from './tile'
 import { createMap } from '../utils/createMap'
 
