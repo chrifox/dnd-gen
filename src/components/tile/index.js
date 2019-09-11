@@ -3,25 +3,33 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 24 // 1 tile = 5ft
+export const TILE_SIZE = 30 // 1 tile = 5ft
 export const BORDER_WIDTH = 1
+const EDGE_MULTIPLIER = 4
 const directions = ['top', 'right', 'bottom', 'left']
 
 const arrowPosition = props => {
-  let top, right, bottom, left
-  top = props.door === 'top' && -TILE_SIZE
-  right = props.door === 'right' && -TILE_SIZE + BORDER_WIDTH
-  bottom = props.door === 'bottom' && -TILE_SIZE
-  left = props.door === 'left' && -TILE_SIZE + BORDER_WIDTH
+  const buttonSpace = TILE_SIZE * -1.5
+  let top, right, bottom, left, margin
+  top = props.door === 'top' && buttonSpace
+  right = props.door === 'right' && buttonSpace
+  bottom = props.door === 'bottom' && buttonSpace
+  left = props.door === 'left' && buttonSpace
   if (props.door === 'top' || props.door === 'bottom') {
-    // TODO: fix top and bottom arrow placement
-    left = TILE_SIZE * props.column + BORDER_WIDTH
+    // left = props.column === 1 ? (BORDER_WIDTH * 5) : props.column * (TILE_SIZE + BORDER_WIDTH)
+    // margin = `margin-left: ${BORDER_WIDTH * (props.column === 1 ? 5 : 1)}px;`
+    margin = `margin-left: ${BORDER_WIDTH * (props.column === 0 ? EDGE_MULTIPLIER : 1)}px;`
+  }
+  if (props.door === 'right' || props.door === 'left') {
+    margin = `margin-top: ${BORDER_WIDTH * (props.row === 0 ? EDGE_MULTIPLIER : 1)}px;`
+    top = 0
   }
   return `
     top: ${top}px;
     right: ${right}px;
     bottom: ${bottom}px;
     left: ${left}px;
+    ${margin};
   `
 }
 
@@ -49,7 +57,7 @@ const tileStyles = props => {
 const tileBorderWidth = props => {
   return directions.reduce((style, dir) =>
     `${style}
-      border-${dir}-width: ${BORDER_WIDTH * props[dir] ? 5 : 1}px;
+      border-${dir}-width: ${BORDER_WIDTH * (props[dir] ? EDGE_MULTIPLIER : 1)}px;
     `, '')
 }
 
@@ -78,16 +86,20 @@ const StyledTile = styled.div`
   ${tileBorderColor};
 `
 
+const TileContainer = styled.div`
+  position: relative;
+`
+
 export const Tile = ({ children, ...props }) => (
-  <>
+  <TileContainer>
     <StyledTile {...props}>
       {children}
     </StyledTile>
 
     {props.door && (
-      <ArrowButton {...props} onPress={() => console.log(`Make room ${props.door}`)}>
+      <ArrowButton {...props} onClick={() => console.log(`Show room ${props.door} [${props.row}][${props.column}]`)}>
         <SvgIcon name={props.door} size={TILE_SIZE * 0.75} />
       </ArrowButton>
     )}
-  </>
+  </TileContainer>
 )

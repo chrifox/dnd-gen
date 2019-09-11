@@ -1,7 +1,7 @@
 import React from 'react'
-import { PageLayout } from '../components/layout'
-import Map from '../components/Map'
-import { H1 } from '../components/typography'
+import { PageLayout } from '../../components/layout'
+import { H1 } from '../../components/typography'
+import Map from './components/Map'
 
 const Dungeon = () => (
   <PageLayout>

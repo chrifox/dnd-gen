@@ -28,13 +28,13 @@ class Room extends React.Component {
     return (
       <div>
         {room.map((row, rowIndex) => (
-          <Row length={row.length} key={rowIndex}>
+          <Row key={rowIndex}>
             {row.map(({ type, ...options }, colIndex) =>
               <Tile
                 key={`${rowIndex}-${colIndex}`}
                 // Position for tile styling
-                row={rowIndex + 1}
-                column={colIndex + 1}
+                row={rowIndex}
+                column={colIndex}
                 value={type}
                 {...options}
               />

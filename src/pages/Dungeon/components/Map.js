@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
-import Button from './Button'
-import { Container, Row } from './map/index'
-import { Tile } from './tile'
-import { createMap } from '../utils/createMap'
+import Button from '../../../components/Button'
+import { Container, Row } from '../../../components/map'
+import { Tile } from '../../../components/tile'
+import { createMap } from '../../../utils/createMap'
 
 const RegenBtn = styled(Button)`
   margin-bottom: 10px;

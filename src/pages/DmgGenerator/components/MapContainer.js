@@ -1,15 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Container } from '../../../components/map/index'
-
-const RelativeContainer = styled(Container)`
-  position: relative;
-`
+import { Container } from '../../../components/map'
 
 const MapContainer = ({ children }) => (
-  <RelativeContainer>
+  <Container>
     {children}
-  </RelativeContainer>
+  </Container>
 )
 
 export default MapContainer
