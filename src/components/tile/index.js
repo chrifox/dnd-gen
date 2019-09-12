@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 30 // 1 tile = 5ft
+export const TILE_SIZE = 20 // 1 tile = 5ft
 export const BORDER_WIDTH = 1
 const EDGE_MULTIPLIER = 4
 const directions = ['top', 'right', 'bottom', 'left']
@@ -16,8 +16,6 @@ const arrowPosition = props => {
   bottom = props.door === 'bottom' && buttonSpace
   left = props.door === 'left' && buttonSpace
   if (props.door === 'top' || props.door === 'bottom') {
-    // left = props.column === 1 ? (BORDER_WIDTH * 5) : props.column * (TILE_SIZE + BORDER_WIDTH)
-    // margin = `margin-left: ${BORDER_WIDTH * (props.column === 1 ? 5 : 1)}px;`
     margin = `margin-left: ${BORDER_WIDTH * (props.column === 0 ? EDGE_MULTIPLIER : 1)}px;`
   }
   if (props.door === 'right' || props.door === 'left') {

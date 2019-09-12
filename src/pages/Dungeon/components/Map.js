@@ -34,10 +34,10 @@ const Input = styled.input`
 
 class Map extends React.Component {
   state = {
-    rows: 15,
-    columns: 60,
-    maxTunnels: 100,
-    maxLength: 8,
+    rows: 10,
+    columns: 30,
+    maxTunnels: 30,
+    maxLength: 5,
     mapGrid: []
   }
 

@@ -18,7 +18,8 @@ export const createMap = args => {
     // then our new direction has to be up or down, and vice versa
     do {
        randomDirection = directions[Math.floor(Math.random() * directions.length)]
-    } while ((randomDirection[0] === -lastDirection[0] && randomDirection[1] === -lastDirection[1]) || (randomDirection[0] === lastDirection[0] && randomDirection[1] === lastDirection[1]))
+    } while ((randomDirection[0] === -lastDirection[0] && randomDirection[1] === -lastDirection[1]) ||
+      (randomDirection[0] === lastDirection[0] && randomDirection[1] === lastDirection[1]))
 
     let randomLength = Math.ceil(Math.random() * maxLength), // length the next tunnel will be (max of maxLength)
       tunnelLength = 0 // current length of tunnel being created
@@ -33,7 +34,6 @@ export const createMap = args => {
           ((currentColumn === columns - 1) && (randomDirection[1] === 1))) {
         break
       } else {
-        // TODO: add other chance tiles here
         map[currentRow][currentColumn] = 0 // set the value of the index in map to 0 (a tunnel, making it one longer)
         currentRow += randomDirection[0] // add the value from randomDirection to row and col (-1, 0, or 1) to update our location
         currentColumn += randomDirection[1]
