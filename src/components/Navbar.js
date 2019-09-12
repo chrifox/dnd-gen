@@ -2,6 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import Router from 'next/router'
 import Button from './Button'
+import SvgIcon from './SvgIcon'
+
+const MENU_WIDTH = 200
 
 const links = [
   { to: '/', label: 'Home' },
@@ -10,24 +13,58 @@ const links = [
 ]
 
 const Nav = styled.nav`
+  position: absolute;
+  top: 0;
+  left: ${props => props.open ? 0 : -MENU_WIDTH}px;
+  bottom: 0;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 5px;
+  flex-direction: column;
+  width: ${MENU_WIDTH}px;
+  background: ${props => props.theme.colors.backgroundDark};
+  transition: 0.2s left ease;
 `
 
 const Link = styled(Button)`
-  margin: 0 5px;
+  margin-bottom: 5px;
 `
 
-const Navbar = () => (
-  <Nav>
-      {links.map(({ key, to, label }) => (
+const MenuToggle = styled(Button)`
+  position: absolute;
+  top: 50%;
+  left: ${props => props.open ? 200 : 0}px;
+  transform: translate(-60%,-50%);
+  transition: 0.2s all ease;
+  background: ${props => props.theme.colors.backgroundDark};
+  border-radius: 50%;
+  padding: 10px;
+  &:hover {
+    ${props => !props.open && `transform: translate(-30%, -50%);`}
+  }
+`
+
+class Navbar extends React.Component {
+  state = { open: false }
+
+  toggleMenu = () => this.setState(state => ({ open: !state.open }))
+
+  render() {
+    const { open } = this.state
+    return (
+      <>
+      <Nav open={open}>
+        {links.map(({ key, to, label }) => (
           <Link key={label} onClick={() => Router.push(to)}>
             {label}
           </Link>
-      ))}
-  </Nav>
-)
+        ))}
+      </Nav>
+
+      <MenuToggle onClick={this.toggleMenu} open={open}>
+        <SvgIcon name={open ? 'left' : 'right'} size={30} />
+      </MenuToggle>
+      </>
+    )
+  }
+}
 
 export default Navbar
