@@ -32,16 +32,16 @@ class Map extends React.Component {
     const { mapGrid } = this.state
     return (
       <>
-
         <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
 
         <Container>
           {mapGrid.map((row, rowIndex) => (
             <Row length={row.length} key={rowIndex}>
-              {row.map((tile, colIndex) =>
+              {row.map(({ type, ...options }, colIndex) =>
                 <Tile
                   key={`${rowIndex}-${colIndex}`}
-                  value={tile}
+                  value={type}
+                  {...options}
                 />
               )}
             </Row>

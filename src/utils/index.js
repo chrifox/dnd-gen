@@ -1,0 +1,5 @@
+export { create2dArray } from './create2dArray'
+export { createMap } from './createMap'
+export { createRoom } from './createRoom'
+export { createTile } from './createTile'
+export { randomRoom } from './randomRoom'

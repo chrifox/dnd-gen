@@ -2,16 +2,24 @@ export const theme = {
   colors: {
     background: '#232323',
     backgroundDark: '#121212',
-    primary: '#872354',
+    primary: '#882469',
     text: '#efefef',
   },
   tileColors: {
-    wall: 'transparent',
-    grid: '#101010',
-    path: '#ccc',
-    start: '#3c3',
-    end: '#c33',
-    door: '#631',
+    path: '#aaa',
+    start: '#292',
+    end: '#922',
+    empty: '#222', // default
+  },
+  borderColors: {
+    door: '#953',
     secretDoor: '#15d',
+    wall: '#777',
+    grid: '#222', // default
+  },
+  zIndex: {
+    menu: 10,
+    menuButton: 11,
+    doorButton: 8,
   },
 }

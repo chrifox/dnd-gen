@@ -9,11 +9,11 @@ const MENU_WIDTH = 200
 const links = [
   { to: '/', label: 'Home' },
   { to: '/dungeon', label: 'Dungeon' },
-  { to: '/dmg-generator', label: 'DMG Generator' },
 ]
 
 const Nav = styled.nav`
   position: absolute;
+  z-index: ${props => props.theme.zIndex.menu};
   top: 0;
   left: ${props => props.open ? 0 : -MENU_WIDTH}px;
   bottom: 0;
@@ -30,6 +30,7 @@ const Link = styled(Button)`
 
 const MenuToggle = styled(Button)`
   position: absolute;
+  z-index: ${props => props.theme.zIndex.menuButton};
   top: 50%;
   left: ${props => props.open ? 200 : 0}px;
   transform: translate(-60%,-50%);

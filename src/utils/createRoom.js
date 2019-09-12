@@ -1,17 +1,4 @@
-const createTile = ({ top, right, bottom, left, door, secretDoor }) => ({
-  // if tile is an edge
-  top,
-  right,
-  bottom,
-  left,
-
-  // if tile has a door
-  door, // a direction or null
-  secretDoor, // a direction or null
-
-  // type of tile e.g. path or wall
-  type: 0,
-})
+import { createTile } from './createTile'
 
 export const createRoom = ({ rows, columns, doors, secretDoor }) => {
   // initialise a room
@@ -30,6 +17,7 @@ export const createRoom = ({ rows, columns, doors, secretDoor }) => {
         right: isRight,
         bottom: isBottom,
         left: isLeft,
+        type: 1,
       })
       room[row].push(tile)
     }
