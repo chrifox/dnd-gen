@@ -7,7 +7,7 @@ const Dungeon = () => (
   <PageLayout>
     <H1>Dungeon</H1>
 
-    <Map rows={30} columns={30} />
+    <Map rows={24} columns={24} />
   </PageLayout>
 )
 

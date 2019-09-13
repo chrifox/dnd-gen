@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../components/Button'
 import { Container, Row } from '../../../components/map'
 import { Tile } from '../../../components/tile'
 import { createMap } from '../../../utils/createMap'
+import MapKey, { getMapKeyItems } from '../../../components/MapKey'
 
 const RegenBtn = styled(Button)`
   margin-bottom: 10px;
 `
 
 class Map extends React.Component {
-  state = { mapGrid: [] }
+  state = { mapGrid: [], keyItems: [] }
 
   componentDidMount() {
     this.newMap()
   }
-
 
   newMap = () => {
     const { rows, columns } = this.props
@@ -25,11 +25,12 @@ class Map extends React.Component {
       maxTunnels: 50,
       maxLength: 5,
     })
-    this.setState({ mapGrid })
+    const keyItems = getMapKeyItems(mapGrid)
+    this.setState({ mapGrid, keyItems })
   }
 
   render() {
-    const { mapGrid } = this.state
+    const { mapGrid, keyItems } = this.state
     return (
       <>
         <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
@@ -47,6 +48,8 @@ class Map extends React.Component {
             </Row>
           ))}
         </Container>
+
+        <MapKey items={keyItems} />
       </>
     )
   }

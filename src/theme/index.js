@@ -17,7 +17,7 @@ export const theme = {
   borderColors: {
     door: '#953',
     secretDoor: '#15d',
-    wall: '#777',
+    wall: '#555',
     grid: '#222', // default
   },
   zIndex: {
