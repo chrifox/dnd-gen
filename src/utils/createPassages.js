@@ -42,11 +42,17 @@ export const createPassages = (
   }
 
   for (let p = 0; p < passagesLength; p++) {
-    let currentTile
+    let currentTile,
+    doorTiles = []
 
     currentPassage = randomRoom(passages, true)
     maxLength = currentPassage.rows,
     doors = currentPassage.doors
+
+    for (let d = 0; d < doors; d++) {
+      let random = Math.floor(Math.random() * maxLength)
+      doorTiles.push(random)
+    }
 
     // choose a tile without a door or secret door
     startingEdge = (Math.floor(Math.random() * roomEdges.length))
@@ -88,16 +94,37 @@ export const createPassages = (
         const movingVertically = (currentDirection === directions[0] || currentDirection === directions[1])
         // set current tile to a path
         map[currentRow][currentColumn] = createTile({
-          // TODO: add borders to ends of passages
           top: movingHorizontally,
           bottom: movingHorizontally,
           left: movingVertically,
           right: movingVertically,
           type: 1,
         })
+
         // Add border to end of passage
         currentTile = map[currentRow][currentColumn]
         currentTile[findDirection(currentDirection)] = (passageLength === maxLength - 1)
+
+        // doors
+        let doorDirection = currentDirection
+        // get random perpendicular direction while passage has not ended
+        do {
+          doorDirection = directions[Math.floor(Math.random() * directions.length)]
+        } while (
+          (doorDirection[0] === -currentDirection[0] && doorDirection[1] === -currentDirection[1]) ||
+          (doorDirection[0] === currentDirection[0] && doorDirection[1] === currentDirection[1]))
+        // set door
+        currentTile.door = doorTiles.includes(passageLength) &&
+          findDirection((passageLength === maxLength - 1) ? currentDirection : doorDirection)
+
+        // end of passage
+        if (passageLength === maxLength - 1) {
+          // check for secret doors
+          if (currentPassage.secretDoor && Math.random() < currentPassage.secretDoor) {
+            currentTile.secretDoor = findDirection(currentDirection)
+          }
+        }
+
         passageLength++
       }
     }

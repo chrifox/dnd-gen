@@ -5,20 +5,21 @@ import SvgIcon from '../SvgIcon'
 
 export const TILE_SIZE = 20 // 1 tile = 5ft
 export const BORDER_WIDTH = 3
-const EDGE_MULTIPLIER = 4
+const EDGE_MULTIPLIER = 1
 const directions = ['top', 'right', 'bottom', 'left']
 
 const arrowPosition = props => {
-  const buttonSpace = TILE_SIZE * -1.5
+  const buttonSpace = (TILE_SIZE + BORDER_WIDTH) * -1
+  const door = props.door || props.secretDoor
   let top, right, bottom, left, margin
-  top = props.door === 'top' && buttonSpace
-  right = props.door === 'right' && buttonSpace
-  bottom = props.door === 'bottom' && buttonSpace
-  left = props.door === 'left' && buttonSpace
-  if (props.door === 'top' || props.door === 'bottom') {
+  top = door === 'top' && buttonSpace
+  right = door === 'right' && buttonSpace
+  bottom = door === 'bottom' && buttonSpace
+  left = door === 'left' && buttonSpace
+  if (door === 'top' || door === 'bottom') {
     margin = `margin-left: ${BORDER_WIDTH * (props.column === 0 ? EDGE_MULTIPLIER : 1)}px;`
   }
-  if (props.door === 'right' || props.door === 'left') {
+  if (door === 'right' || door === 'left') {
     margin = `margin-top: ${BORDER_WIDTH * (props.row === 0 ? EDGE_MULTIPLIER : 1)}px;`
     top = 0
   }
@@ -40,7 +41,7 @@ const ArrowButton = styled(Button)`
   width: ${TILE_SIZE}px;
   height: ${TILE_SIZE}px;
   padding: 0;
-  background: ${props => props.theme.colors.action};
+  background: ${props => !!props.secretDoor ? props.theme.colors.specialAction : props.theme.colors.action};
   ${arrowPosition};
 `
 
@@ -100,6 +101,12 @@ export const Tile = ({ children, ...props }) => (
     {props.door && (
       <ArrowButton {...props} onClick={() => console.log(`Spawn room ${props.door} of [${props.row}][${props.column}]`)}>
         <SvgIcon name={props.door} size={TILE_SIZE * 0.75} />
+      </ArrowButton>
+    )}
+
+    {props.secretDoor && (
+      <ArrowButton {...props} onClick={() => console.log(`Spawn room ${props.secretDoor} of [${props.row}][${props.column}]`)}>
+        <SvgIcon name={props.secretDoor} size={TILE_SIZE * 0.75} />
       </ArrowButton>
     )}
   </TileContainer>

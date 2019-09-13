@@ -2,8 +2,9 @@ export const theme = {
   colors: {
     background: '#232323',
     backgroundDark: '#121212',
-    primary: '#772266',
-    action: '#227766',
+    primary: '#726',
+    action: '#276',
+    specialAction: '#723',
     text: '#efefef',
   },
   tileColors: {
