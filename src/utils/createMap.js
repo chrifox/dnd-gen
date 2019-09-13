@@ -8,15 +8,19 @@ import {
 import { startingAreas } from '../resources'
 
 export const createMap = ({ rows, columns }) => {
-  let map = create2dArray(rows, columns, createTile({ type: 0 })), // generate empty map
-  currentRow = Math.floor(Math.random() * rows), // start at a random row
-  currentColumn = Math.floor(Math.random() * columns) // start at a random column
+  // generate empty map
+  let map = create2dArray(rows, columns, createTile({ type: 0 })),
+  // start at a random row
+  currentRow = Math.floor(Math.random() * rows),
+  // start at a random column
+  currentColumn = Math.floor(Math.random() * columns),
+  mapWithPassages = []
 
-  // generate room
+  // generate starting area
   const startArea = randomRoom(startingAreas)
   const startingAreaTiles = createRoom(startArea)
 
-  // adjust current position to fit chosen room
+  // adjust current position to fit chosen starting area
   if (currentRow + startArea.rows > rows) {
     currentRow -= startArea.rows
   }
@@ -27,18 +31,25 @@ export const createMap = ({ rows, columns }) => {
   // store starting tile for styling later
   const startTile = { row: currentRow, column: currentColumn }
 
-  // update map to reflect new room
+  // update map with chosen starting area
   for (let row = 0; row < startArea.rows; row++) {
     for (let col = 0; col < startArea.columns; col ++) {
-      map[currentRow + row][currentColumn + col] = startingAreaTiles[row][col]
+      map[currentRow + row][currentColumn + col] = {
+        ...startingAreaTiles[row][col],
+        row: currentRow + row,
+        column: currentColumn + col,
+      }
     }
   }
 
-  // add passages
-  map = createPassages({ currentRow, currentColumn }, startArea.passages, map)
+  // create any passages off from starting area
+  map = createPassages({ currentRow, currentColumn }, { map, rows, columns }, startArea.passages, startingAreaTiles)
 
-  map[startTile.row][startTile.column].type = 's' // set start tile color
-  // map[currentRow][currentColumn] = 'e' // set end tile color
+  // set start tile color
+  // map[startTile.row][startTile.column].type = 's'
+
+  // set end tile color
+  // map[currentRow][currentColumn] = 'e'
 
   return map
 }

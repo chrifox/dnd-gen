@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 18 // 1 tile = 5ft
+export const TILE_SIZE = 20 // 1 tile = 5ft
 export const BORDER_WIDTH = 3
 const EDGE_MULTIPLIER = 4
 const directions = ['top', 'right', 'bottom', 'left']
@@ -40,7 +40,7 @@ const ArrowButton = styled(Button)`
   width: ${TILE_SIZE}px;
   height: ${TILE_SIZE}px;
   padding: 0;
-  background: #aaa;
+  background: ${props => props.theme.colors.action};
   ${arrowPosition};
 `
 
@@ -48,7 +48,8 @@ const tileStyles = props => {
   switch (props.value) {
     case 's': return 'start'
     case 'e': return 'end'
-    case 1: return 'path'
+    case 1: return 'floor'
+    case 2: return 'passage'
     default: return 'empty' // default is 0
   }
 }
@@ -96,8 +97,8 @@ export const Tile = ({ children, ...props }) => (
       {children}
     </StyledTile>
 
-    {props.door === 'REMOVE THIS TO SHOW BUTTONS' && (
-      <ArrowButton {...props} onClick={() => console.log(`Show room ${props.door} [${props.row}][${props.column}]`)}>
+    {props.door && (
+      <ArrowButton {...props} onClick={() => console.log(`Spawn room ${props.door} of [${props.row}][${props.column}]`)}>
         <SvgIcon name={props.door} size={TILE_SIZE * 0.75} />
       </ArrowButton>
     )}

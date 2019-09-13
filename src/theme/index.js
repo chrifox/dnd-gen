@@ -2,11 +2,13 @@ export const theme = {
   colors: {
     background: '#232323',
     backgroundDark: '#121212',
-    primary: '#882469',
+    primary: '#772266',
+    action: '#227766',
     text: '#efefef',
   },
   tileColors: {
-    path: '#aaa',
+    floor: '#aaa',
+    // passage: '#28c',
     start: '#292',
     end: '#922',
     empty: '#222', // default
