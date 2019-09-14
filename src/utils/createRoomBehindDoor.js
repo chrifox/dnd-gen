@@ -2,7 +2,6 @@ import {
   randomRoom,
   createRoom,
   createTile,
-  addRoomToMap,
 } from './'
 import { chambers, doors } from '../resources'
 
@@ -10,13 +9,14 @@ export const createRoomBehindDoor = (startTile, map, door) => {
   const rows = map.length
   const columns = map[0].length
 
-  let newMap = [].concat(map),
-  startRow = startTile.row + door.row,
+  let startRow = startTile.row + door.row,
   startColumn = startTile.column + door.column,
   direction = door.door,
   spawnChamber,
   roomChoice,
   isSafe = false
+
+  const doorTile = { row: startRow, column: startColumn }
 
   // 50% chance to spawn a chamber
   spawnChamber = Math.random() < 0.5
@@ -49,24 +49,14 @@ export const createRoomBehindDoor = (startTile, map, door) => {
 
   const room = createRoom(roomChoice, spawnChamber ? 4 : 2)
 
-  // newMap = addRoomToMap(
-  //   {
-  //     row: startRow,
-  //     column: startColumn,
-  //   },
-  //   map,
-  //   roomChoice,
-  //   room.roomTiles,
-  // )
-
   const output = {
-    // newMap,
-    room: {
-      startRow,
-      startColumn,
-      roomChoice,
-      room,
+    doorTile,
+    position: {
+      row: startRow,
+      column: startColumn,
     },
+    roomChoice,
+    room,
   }
 
   return output

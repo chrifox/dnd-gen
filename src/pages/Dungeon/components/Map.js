@@ -20,6 +20,7 @@ class Map extends React.Component {
     mapGrid: [],
     keyItems: [],
     rooms: [],
+    roomCounter: 0,
   }
 
   componentDidMount() {
@@ -33,8 +34,30 @@ class Map extends React.Component {
     this.setState({ mapGrid, rooms, keyItems })
   }
 
-  openADoor = room => {
-    // addRoomToMap()
+  openADoor = door => {
+    let rooms = this.state.rooms
+    const roomToReveal = rooms
+      .filter(r => !r.visible)
+      .reduce((chosenRoom, r) => {
+        if (r.doorTile.row === door.row && r.doorTile.column === door.column) {
+          rooms.pop(r)
+          chosenRoom = {
+            position: r.position,
+            room: r.roomChoice,
+            roomTiles: r.room.roomTiles,
+          }
+        }
+        return chosenRoom
+      }, null)
+    if (roomToReveal) {
+      this.setState(state => {
+        const roomCounter = state.roomCounter + 1
+        const mapGrid = addRoomToMap(state.mapGrid, roomToReveal)
+        const keyItems = getMapKeyItems(mapGrid)
+        // TODO: make room visible in array
+        return { mapGrid, keyItems, roomCounter, rooms }
+      })
+    }
   }
 
   render() {
@@ -57,6 +80,7 @@ class Map extends React.Component {
                     key={`${rowIndex}-${colIndex}`}
                     value={type}
                     {...options}
+                    openADoor={this.openADoor}
                   />
                 )}
               </Row>

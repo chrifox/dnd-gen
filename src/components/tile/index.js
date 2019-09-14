@@ -125,7 +125,7 @@ const TileContainer = styled.div`
   position: relative;
 `
 
-export const Tile = ({ children, ...props }) => (
+export const Tile = ({ openADoor, children, ...props }) => (
   <TileContainer>
     <StyledTile {...props}>
       {children}
@@ -134,14 +134,14 @@ export const Tile = ({ children, ...props }) => (
     {props.door && (
       <DoorButton
         {...props}
-        onClick={() => console.log(`Spawn room ${props.door} of [${props.row}][${props.column}]`)}
+        onClick={() => openADoor(props)}
       />
     )}
 
     {props.secretDoor && (
       <DoorButton
         {...props}
-        onClick={() => console.log(`Spawn room ${props.secretDoor} of [${props.row}][${props.column}]`)}
+        onClick={() => console.log(`Spawn secret room ${props.secretDoor} of [${props.row}][${props.column}]`)}
       />
     )}
   </TileContainer>

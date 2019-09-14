@@ -1,4 +1,4 @@
-export const addRoomToMap = (position, map, room, roomTiles) => {
+export const addRoomToMap = (map, { position, room, roomTiles }) => {
   let newMap = [].concat(map)
   const currentRow = position.row
   const currentColumn = position.column

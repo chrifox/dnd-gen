@@ -48,7 +48,15 @@ export const createMap = ({ rows, columns }) => {
   const startTile = { row: currentRow, column: currentColumn }
 
   // Starting Area
-  map = addRoomToMap(startTile, map, startArea, startingAreaRoom.roomTiles)
+  map = addRoomToMap(
+    map,
+    {
+      position: startTile,
+      room: startArea,
+      roomTiles: startingAreaRoom.roomTiles,
+    }
+  )
+
   // create any passages off from starting area
   const startWithPassages = createPassages(startTile, { map, rows, columns }, startArea.passages, startingAreaRoom.roomTiles)
   map = startWithPassages.map
@@ -56,11 +64,9 @@ export const createMap = ({ rows, columns }) => {
   // TODO: add passages to map rooms
 
   // generate additional spaces from any doors
-  startingAreaRoom.doors.map(d => {
-    const { newMap, room } = createRoomBehindDoor(startTile, map, d)
-    // map = newMap
-    rooms.push(room)
-  })
+  startingAreaRoom.doors.map(d =>
+    rooms.push(createRoomBehindDoor(startTile, map, d))
+  )
 
   // set start tile color
   // map[startTile.row][startTile.column].type = 's'

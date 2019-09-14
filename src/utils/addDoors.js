@@ -12,8 +12,8 @@ export const addDoors = (room, doors, secretDoor) => {
   )
 
   for (let door = 0; door < doors; door++) {
-    // choose a random edge tile
-    random = Math.floor(Math.random() * edges.length)
+    // choose a random edge tile (exclude first tile)
+    random = Math.ceil(Math.random() * edges.length - 1)
     // select tile for a door
     chosenDoors.push(edges[random])
     // remove edge tile after they have been used
