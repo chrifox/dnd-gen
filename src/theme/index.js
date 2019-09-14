@@ -21,8 +21,9 @@ export const theme = {
     grid: '#222', // default
   },
   zIndex: {
-    menu: 10,
     menuButton: 11,
+    menu: 10,
+    overlay: 9,
     doorButton: 8,
   },
 }
