@@ -30,8 +30,8 @@ export const createRoomBehindDoor = (startTile, map, door) => {
       (startColumn - roomChoice.columns < 0) ||
       (startColumn + roomChoice.columns > columns - 1)
     ) {
-      // 50% chance to spawn a chamber
-      spawnChamber = Math.random() < 0.5
+      // 40% chance to spawn a chamber
+      spawnChamber = Math.random() < 0.4
       roomChoice = randomRoom(spawnChamber ? chambers : doors)
       break
     } else {
@@ -57,6 +57,7 @@ export const createRoomBehindDoor = (startTile, map, door) => {
     },
     roomChoice,
     room,
+    visible: false,
   }
 
   return output

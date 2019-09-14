@@ -28,7 +28,7 @@ const Control = styled.div`
 `
 
 class Dungeon extends React.Component {
-  state = { menuOpen: false, rows: 30, columns: 50 }
+  state = { keyOpen: false, menuOpen: false, rows: 30, columns: 50 }
 
   componentDidMount() {
     document.addEventListener('keyup', this.keyPress, false)
@@ -41,18 +41,21 @@ class Dungeon extends React.Component {
   keyPress = e => {
     switch (e.keyCode) {
       case 77: return this.toggleMenu() // m
+      case 75: return this.toggleKey() // k
     }
   }
 
   toggleMenu = () => this.setState(state => ({ menuOpen: !state.menuOpen }))
 
+  toggleKey = () => this.setState(state => ({ keyOpen: !state.keyOpen }))
+
   updateDimensions = e => this.setState({ [e.target.name]: parseInt(e.target.value) })
 
   render() {
-    const { rows, columns, menuOpen } = this.state
+    const { rows, columns, menuOpen, keyOpen } = this.state
     return (
       <PageLayout>
-        <Map rows={rows} columns={columns} />
+        <Map rows={rows} columns={columns} keyOpen={keyOpen} />
 
         <Menu open={menuOpen}>
           <H3>Menu</H3>

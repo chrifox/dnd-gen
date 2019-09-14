@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../components/Button'
 import MapKey, { getMapKeyItems } from '../../../components/MapKey'
-import { Container, Row } from '../../../components/map'
+import { Row } from '../../../components/map'
 import { Tile, TILE_SIZE, BORDER_WIDTH } from '../../../components/tile'
 import Camera from './Camera'
-import { createMap, addRoomToMap } from '../../../utils'
+import { createMap, addRoomToMap, createRoomBehindDoor } from '../../../utils'
 
 const RegenBtn = styled(Button)`
   position: absolute;
@@ -35,60 +35,57 @@ class Map extends React.Component {
   }
 
   openADoor = door => {
-    let rooms = this.state.rooms
-    const roomToReveal = rooms
-      .filter(r => !r.visible)
-      .reduce((chosenRoom, r) => {
-        if (r.doorTile.row === door.row && r.doorTile.column === door.column) {
-          rooms.pop(r)
-          chosenRoom = {
-            position: r.position,
-            room: r.roomChoice,
-            roomTiles: r.room.roomTiles,
-          }
+    let rooms = this.state.rooms.filter(r => !r.visible)
+    const roomToReveal = rooms.reduce((chosenRoom, r, i) => {
+      if (r.doorTile.row === door.row && r.doorTile.column === door.column) {
+        rooms[i].visible = true
+        chosenRoom = {
+          position: r.position,
+          room: r.roomChoice,
+          roomTiles: r.room.roomTiles,
+          doors: r.room.doors,
         }
-        return chosenRoom
-      }, null)
+      }
+      return chosenRoom
+    }, null)
     if (roomToReveal) {
       this.setState(state => {
         const roomCounter = state.roomCounter + 1
         const mapGrid = addRoomToMap(state.mapGrid, roomToReveal)
         const keyItems = getMapKeyItems(mapGrid)
-        // TODO: make room visible in array
+        roomToReveal.doors.map(d => rooms.push(createRoomBehindDoor(roomToReveal.position, mapGrid, d)))
         return { mapGrid, keyItems, roomCounter, rooms }
       })
     }
   }
 
   render() {
-    const { rows, columns } = this.props
+    const { rows, columns, keyOpen } = this.props
     const { mapGrid, keyItems } = this.state
     const contentSize = {
-      width: columns * (TILE_SIZE + BORDER_WIDTH * 2),
       height: rows * (TILE_SIZE + BORDER_WIDTH * 2),
+      width: columns * (TILE_SIZE + BORDER_WIDTH * 2),
     }
     return (
       <>
         <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
 
         <Camera contentSize={contentSize}>
-          <Container>
-            {mapGrid.map((row, rowIndex) => (
-              <Row length={row.length} key={rowIndex}>
-                {row.map(({ type, ...options }, colIndex) =>
-                  <Tile
-                    key={`${rowIndex}-${colIndex}`}
-                    value={type}
-                    {...options}
-                    openADoor={this.openADoor}
-                  />
-                )}
-              </Row>
-            ))}
-          </Container>
+          {mapGrid.map((row, rowIndex) => (
+            <Row length={row.length} key={rowIndex}>
+              {row.map(({ type, ...options }, colIndex) =>
+                <Tile
+                  key={`${rowIndex}-${colIndex}`}
+                  value={type}
+                  {...options}
+                  openADoor={this.openADoor}
+                />
+              )}
+            </Row>
+          ))}
         </Camera>
 
-        <MapKey items={keyItems} />
+        <MapKey items={keyItems} open={keyOpen} />
       </>
     )
   }

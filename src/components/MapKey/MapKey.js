@@ -6,10 +6,10 @@ const Key = styled.div`
   background: ${props => props.theme.colors.backgroundDark};
   position: absolute;
   top: 10px;
-  right: 10px;
-  display: flex;
+  right: 12px;
+  display: ${props => props.open ? 'flex' : 'none'};
   flex-direction: column;
-  padding: 0 30px 10px 40px;
+  padding: 10px 40px;
   border: 1px solid #ddd;
 `
 
@@ -27,8 +27,8 @@ const Label = styled.div`
   margin-left: 10px;
 `
 
-const MapKey = ({ items }) => (
-  <Key>
+const MapKey = ({ items, open }) => (
+  <Key open={open}>
     <H3>Legend</H3>
     {items.map(({ name, symbol, description }) => (
       <Item key={name}>

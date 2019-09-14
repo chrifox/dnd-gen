@@ -141,7 +141,7 @@ export const Tile = ({ openADoor, children, ...props }) => (
     {props.secretDoor && (
       <DoorButton
         {...props}
-        onClick={() => console.log(`Spawn secret room ${props.secretDoor} of [${props.row}][${props.column}]`)}
+        onClick={() => openADoor(props)}
       />
     )}
   </TileContainer>

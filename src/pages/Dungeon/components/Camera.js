@@ -51,7 +51,6 @@ const contentTranslate = ({ translateX, translateY }) => {
 const Content = styled.div`
   transform: ${contentTranslate};
   transition: 0.1s all ease-out;
-  padding: 0;
 `
 
 class Camera extends React.Component {
@@ -67,6 +66,11 @@ class Camera extends React.Component {
     window.addEventListener('resize', this.updateWindowDimensions)
   }
 
+  componentDidUpdate(prevState) {
+    if (prevState.translateY !== this.state.translateY) console.log('y',this.state.translateY)
+    if (prevState.translateX !== this.state.translateX) console.log('x',this.state.translateX)
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions)
   }
@@ -75,17 +79,17 @@ class Camera extends React.Component {
 
   updateTranslate = direction => {
     const { width, height } = this.props.contentSize
-    if (direction === 'top' && (this.state.translateY < 0)) {
-      this.setState(state => ({ translateY: state.translateY + MOVE_AMOUNT }))
+    if (direction === 'top' && (this.state.translateY < MOVE_AMOUNT)) {
+      this.setState(state => ({ translateY: Math.min(0, state.translateY + MOVE_AMOUNT) }))
     }
-    if (direction === 'left' && (this.state.translateX < 0)) {
-      this.setState(state => ({ translateX: state.translateX + MOVE_AMOUNT }))
+    if (direction === 'left' && (this.state.translateX < MOVE_AMOUNT)) {
+      this.setState(state => ({ translateX: Math.min(0, state.translateX + MOVE_AMOUNT) }))
     }
     if (direction === 'bottom' && (this.state.translateY > this.state.height - height)) {
-      this.setState(state => ({ translateY: state.translateY - MOVE_AMOUNT }))
+      this.setState(state => ({ translateY: Math.max(state.translateY - MOVE_AMOUNT, this.state.height - height) }))
     }
-    if (direction === 'right' && this.state.translateX > this.state.width - width) {
-      this.setState(state => ({ translateX: state.translateX - MOVE_AMOUNT }))
+    if (direction === 'right' && (this.state.translateX > this.state.width - width)) {
+      this.setState(state => ({ translateX: Math.max(state.translateX - MOVE_AMOUNT, this.state.width - width) }))
     }
   }
 
@@ -99,6 +103,7 @@ class Camera extends React.Component {
 
   render() {
     const { width, height, translateX, translateY } = this.state
+    console.log(width, this.props.contentSize.width)
     return (
       <Container width={width} height={height}>
         <Content translateX={translateX} translateY={translateY}>
