@@ -21,23 +21,29 @@ export const createMap = ({ rows, columns }) => {
   const startingAreaTiles = createRoom(startArea)
 
   // adjust current position to fit chosen starting area
-  if (currentRow + startArea.rows > rows) {
-    currentRow -= startArea.rows
+  // Prevent spawning within 10 tiles from edge
+  const DEAD_ZONE = 10
+  if (currentRow + startArea.rows > rows - DEAD_ZONE) {
+    currentRow -= startArea.rows + DEAD_ZONE
   }
-  if (currentColumn + startArea.columns > columns) {
-    currentColumn -= startArea.columns
+  if (currentColumn + startArea.columns > columns - DEAD_ZONE) {
+    currentColumn -= startArea.columns + DEAD_ZONE
   }
+  if (currentRow < DEAD_ZONE + 1) currentRow = DEAD_ZONE + 1
+  if (currentColumn < DEAD_ZONE + 1) currentColumn = DEAD_ZONE + 1
 
   // store starting tile for styling later
   const startTile = { row: currentRow, column: currentColumn }
 
   // update map with chosen starting area
-  for (let row = 0; row < startArea.rows; row++) {
-    for (let col = 0; col < startArea.columns; col ++) {
-      map[currentRow + row][currentColumn + col] = {
-        ...startingAreaTiles[row][col],
-        row: currentRow + row,
-        column: currentColumn + col,
+  if (map) {
+    for (let row = 0; row < startArea.rows; row++) {
+      for (let col = 0; col < startArea.columns; col ++) {
+        map[currentRow + row][currentColumn + col] = {
+          ...startingAreaTiles[row][col],
+          row: currentRow + row,
+          column: currentColumn + col,
+        }
       }
     }
   }

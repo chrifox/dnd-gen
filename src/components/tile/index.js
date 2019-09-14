@@ -39,6 +39,8 @@ const sizePosition = props => {
   `
 }
 
+// const doorBackground = props => props => !!props.secretDoor ? props.theme.borderColors.secretDoor : `url(/static/img/door-${props.door}.jpg)`
+
 const DoorButton = styled(Button)`
   position: absolute;
   z-index: ${props => props.theme.zIndex.doorButton};
@@ -47,6 +49,9 @@ const DoorButton = styled(Button)`
   align-items: center;
   padding: 0;
   background: ${props => props.theme.borderColors[!!props.secretDoor ? 'secretDoor' : 'door']};
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   ${sizePosition};
 `
 

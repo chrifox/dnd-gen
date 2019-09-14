@@ -2,7 +2,8 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 const headingStyles = css`
-  margin: 0.5em 0;
+  margin: 0 0 1em;
+  text-align: center;
   color: ${props => props.theme.colors.text};
 `
 
