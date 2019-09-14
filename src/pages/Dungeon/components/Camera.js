@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { TILE_SIZE, BORDER_WIDTH } from '../../../components/tile'
-import { throttle } from '../../../utils'
 
 const MOVE_AMOUNT = TILE_SIZE + BORDER_WIDTH * 2
 const directions = ['top','bottom','left','right']
