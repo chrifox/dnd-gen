@@ -3,52 +3,60 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 20 // 1 tile = 5ft
-export const BORDER_WIDTH = 1
-const EDGE_MULTIPLIER = 4
+export const TILE_SIZE = 18 // 1 tile = 5ft
+export const BORDER_WIDTH = 2
 const directions = ['top', 'right', 'bottom', 'left']
 
-const arrowPosition = props => {
-  const buttonSpace = TILE_SIZE * -1.5
+const sizePosition = props => {
+  const door = props.door || props.secretDoor
+  const doorVertical = door === 'top' || door === 'bottom'
+  const doorHorizontal = door === 'right' || door === 'left'
+  const buttonSpace = (TILE_SIZE - BORDER_WIDTH) * -1
   let top, right, bottom, left, margin
-  top = props.door === 'top' && buttonSpace
-  right = props.door === 'right' && buttonSpace
-  bottom = props.door === 'bottom' && buttonSpace
-  left = props.door === 'left' && buttonSpace
-  if (props.door === 'top' || props.door === 'bottom') {
-    margin = `margin-left: ${BORDER_WIDTH * (props.column === 0 ? EDGE_MULTIPLIER : 1)}px;`
+  top = door === 'top' && buttonSpace * (doorVertical ? 0.25 : 1)
+  right = door === 'right' && buttonSpace * (doorHorizontal ? 0.25 : 1)
+  bottom = door === 'bottom' && buttonSpace * (doorVertical ? 0.25 : 1)
+  left = door === 'left' && buttonSpace * (doorHorizontal ? 0.25 : 1)
+  if (doorVertical) {
+    margin = `margin-left: ${BORDER_WIDTH}px;`
   }
-  if (props.door === 'right' || props.door === 'left') {
-    margin = `margin-top: ${BORDER_WIDTH * (props.row === 0 ? EDGE_MULTIPLIER : 1)}px;`
+  if (doorHorizontal) {
+    margin = `margin-top: ${BORDER_WIDTH}px;`
     top = 0
   }
   return `
+    width: ${TILE_SIZE * (doorVertical ? 1 : 0.5)}px;
+    height: ${TILE_SIZE * (doorHorizontal ? 1 : 0.5)}px;
     top: ${top}px;
     right: ${right}px;
     bottom: ${bottom}px;
     left: ${left}px;
     ${margin};
+    transition: 0.2s transform ease;
+    &:hover {
+      transform: scale(2.5);
+    }
   `
 }
 
-const ArrowButton = styled(Button)`
+const DoorButton = styled(Button)`
   position: absolute;
+  z-index: ${props => props.theme.zIndex.doorButton};
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${TILE_SIZE}px;
-  height: ${TILE_SIZE}px;
   padding: 0;
-  background: #aaa;
-  ${arrowPosition};
+  background: ${props => props.theme.borderColors[!!props.secretDoor ? 'secretDoor' : 'door']};
+  ${sizePosition};
 `
 
 const tileStyles = props => {
   switch (props.value) {
     case 's': return 'start'
     case 'e': return 'end'
-    case 0: return 'path'
-    default: return 'wall' // default is 1
+    case 1: return 'floor'
+    case 2: return 'passage'
+    default: return 'empty' // default is 0
   }
 }
 
@@ -60,15 +68,16 @@ const tileBorderWidth = props => {
 }
 
 const borderColor = (props, dir) => {
-  if (props[dir] && (props.door === dir)) return 'door'
-  if (props[dir] && (props.secretDoor === dir)) return 'secretDoor'
+  // if (props[dir] && (props.door === dir)) return 'door'
+  // if (props[dir] && (props.secretDoor === dir)) return 'secretDoor'
+  if (props[dir]) return 'wall'
   return 'grid'
 }
 
 const tileBorderColor = props => {
   return directions.reduce((style, dir) =>
     `${style}
-      border-${dir}-color: ${props.theme.tileColors[borderColor(props, dir)]};
+      border-${dir}-color: ${props.theme.borderColors[borderColor(props, dir)]};
     `, '')
 }
 
@@ -80,7 +89,7 @@ const StyledTile = styled.div`
   height: ${TILE_SIZE}px;
   background: ${props => props.theme.tileColors[tileStyles(props)]};
   border-style: solid;
-  ${tileBorderWidth};
+  border-width: ${BORDER_WIDTH}px;
   ${tileBorderColor};
 `
 
@@ -95,9 +104,17 @@ export const Tile = ({ children, ...props }) => (
     </StyledTile>
 
     {props.door && (
-      <ArrowButton {...props} onClick={() => console.log(`Show room ${props.door} [${props.row}][${props.column}]`)}>
-        <SvgIcon name={props.door} size={TILE_SIZE * 0.75} />
-      </ArrowButton>
+      <DoorButton
+        {...props}
+        onClick={() => console.log(`Spawn room ${props.door} of [${props.row}][${props.column}]`)}
+      />
+    )}
+
+    {props.secretDoor && (
+      <DoorButton
+        {...props}
+        onClick={() => console.log(`Spawn room ${props.secretDoor} of [${props.row}][${props.column}]`)}
+      />
     )}
   </TileContainer>
 )

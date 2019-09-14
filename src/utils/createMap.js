@@ -1,54 +1,55 @@
-import { create2dArray } from './create2dArray'
+import {
+  create2dArray,
+  createRoom,
+  createTile,
+  randomRoom,
+  createPassages,
+} from './'
+import { startingAreas } from '../resources'
 
-export const createMap = args => {
-  let { rows, columns, maxTunnels, maxLength } = args, // width and height of the map
-  map = create2dArray(rows, columns, 1), // create a 2d array full of 1's
-  currentRow = Math.floor(Math.random() * rows), // our current row - start at a random spot
-  currentColumn = Math.floor(Math.random() * columns), // our current column - start at a random spot
-  directions = [[-1, 0], [1, 0], [0, -1], [0, 1]], // array to get a random direction from (left,right,up,down)
-  lastDirection = [], // save the last direction we went
-  randomDirection // next turn/direction - holds a value from directions
+export const createMap = ({ rows, columns }) => {
+  // generate empty map
+  let map = create2dArray(rows, columns, createTile({ type: 0 })),
+  // start at a random row
+  currentRow = Math.floor(Math.random() * rows),
+  // start at a random column
+  currentColumn = Math.floor(Math.random() * columns),
+  mapWithPassages = []
 
-  const startTile = { row: currentRow, column: currentColumn } // store starting tile
+  // generate starting area
+  const startArea = randomRoom(startingAreas)
+  const startingAreaTiles = createRoom(startArea)
 
-  // lets create some tunnels - while maxTunnels, dimensions, and maxLength  is greater than 0.
-  while (maxTunnels && rows && columns && maxLength) {
-    // lets get a random direction - until it is a perpendicular to our lastDirection
-    // if the last direction = left or right,
-    // then our new direction has to be up or down, and vice versa
-    do {
-       randomDirection = directions[Math.floor(Math.random() * directions.length)]
-    } while ((randomDirection[0] === -lastDirection[0] && randomDirection[1] === -lastDirection[1]) ||
-      (randomDirection[0] === lastDirection[0] && randomDirection[1] === lastDirection[1]))
+  // adjust current position to fit chosen starting area
+  if (currentRow + startArea.rows > rows) {
+    currentRow -= startArea.rows
+  }
+  if (currentColumn + startArea.columns > columns) {
+    currentColumn -= startArea.columns
+  }
 
-    let randomLength = Math.ceil(Math.random() * maxLength), // length the next tunnel will be (max of maxLength)
-      tunnelLength = 0 // current length of tunnel being created
+  // store starting tile for styling later
+  const startTile = { row: currentRow, column: currentColumn }
 
-  // lets loop until our tunnel is long enough or until we hit an edge
-    while (tunnelLength < randomLength) {
-
-      // break the loop if it is going out of the map
-      if (((currentRow === 0) && (randomDirection[0] === -1)) ||
-          ((currentColumn === 0) && (randomDirection[1] === -1)) ||
-          ((currentRow === rows - 1) && (randomDirection[0] === 1)) ||
-          ((currentColumn === columns - 1) && (randomDirection[1] === 1))) {
-        break
-      } else {
-        map[currentRow][currentColumn] = 0 // set the value of the index in map to 0 (a tunnel, making it one longer)
-        currentRow += randomDirection[0] // add the value from randomDirection to row and col (-1, 0, or 1) to update our location
-        currentColumn += randomDirection[1]
-        tunnelLength++ // the tunnel is now one longer, so lets increment that variable
+  // update map with chosen starting area
+  for (let row = 0; row < startArea.rows; row++) {
+    for (let col = 0; col < startArea.columns; col ++) {
+      map[currentRow + row][currentColumn + col] = {
+        ...startingAreaTiles[row][col],
+        row: currentRow + row,
+        column: currentColumn + col,
       }
-    }
-
-    if (tunnelLength) { // update our variables unless our last loop broke before we made any part of a tunnel
-      lastDirection = randomDirection // set lastDirection, so we can remember what way we went
-      maxTunnels-- // we created a whole tunnel so lets decrement how many we have left to create
     }
   }
 
-  map[startTile.row][startTile.column] = 's' // set start tile color
-  map[currentRow][currentColumn] = 'e' // set end tile color
+  // create any passages off from starting area
+  map = createPassages({ currentRow, currentColumn }, { map, rows, columns }, startArea.passages, startingAreaTiles)
 
-  return map // all our tunnels have been created and our map is complete, so lets return it to our render()
+  // set start tile color
+  // map[startTile.row][startTile.column].type = 's'
+
+  // set end tile color
+  // map[currentRow][currentColumn] = 'e'
+
+  return map
 }
