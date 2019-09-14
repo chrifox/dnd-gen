@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 18 // 1 tile = 5ft
-export const BORDER_WIDTH = 2
+export const TILE_SIZE = 20 // 1 tile = 5ft
+export const BORDER_WIDTH = 1
 const directions = ['top', 'right', 'bottom', 'left']
 
 const sizePosition = props => {
@@ -39,8 +39,6 @@ const sizePosition = props => {
   `
 }
 
-// const doorBackground = props => props => !!props.secretDoor ? props.theme.borderColors.secretDoor : `url(/static/img/door-${props.door}.jpg)`
-
 const DoorButton = styled(Button)`
   position: absolute;
   z-index: ${props => props.theme.zIndex.doorButton};
@@ -61,6 +59,9 @@ const tileStyles = props => {
     case 'e': return 'end'
     case 1: return 'floor'
     case 2: return 'passage'
+    case 3: return 'trap'
+    case 4: return 'chamber'
+    case 5: return 'water'
     default: return 'empty' // default is 0
   }
 }
@@ -86,16 +87,38 @@ const tileBorderColor = props => {
     `, '')
 }
 
+const tileBackground = props => {
+  const color = props.theme.tileColors[tileStyles(props)]
+  const imageBase = img => `
+    background-image: url("/static/img/tiles/${img}");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  `
+  let image
+  switch (tileStyles(props)) {
+    case 'floor':
+    case 'passage':
+      return image = imageBase(`tiles${Math.ceil(Math.random() * 9)}.jpg`)
+    case 'trap':
+      return image = imageBase('trap.jpg')
+  }
+  return `
+    background-color: ${color};
+    ${image};
+  `
+}
+
 const StyledTile = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: ${TILE_SIZE}px;
   height: ${TILE_SIZE}px;
-  background: ${props => props.theme.tileColors[tileStyles(props)]};
   border-style: solid;
   border-width: ${BORDER_WIDTH}px;
   ${tileBorderColor};
+  ${tileBackground};
 `
 
 const TileContainer = styled.div`

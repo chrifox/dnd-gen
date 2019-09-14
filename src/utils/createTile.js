@@ -1,4 +1,9 @@
-export const createTile = ({ top, right, bottom, left, door, secretDoor, type = 0 }) => ({
+export const createTile = ({
+  top, right, bottom, left,
+  door, secretDoor,
+  type = 0,
+  row, column,
+}) => ({
   // if tile is an edge
   top,
   right,
@@ -11,4 +16,8 @@ export const createTile = ({ top, right, bottom, left, door, secretDoor, type = 
 
   // type of tile e.g. path or wall
   type,
+
+  // position of tile within dungeon map grid
+  row,
+  column,
 })

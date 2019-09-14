@@ -5,7 +5,7 @@ import MapKey, { getMapKeyItems } from '../../../components/MapKey'
 import { Container, Row } from '../../../components/map'
 import { Tile, TILE_SIZE, BORDER_WIDTH } from '../../../components/tile'
 import Camera from './Camera'
-import { createMap } from '../../../utils/createMap'
+import { createMap, addRoomToMap } from '../../../utils'
 
 const RegenBtn = styled(Button)`
   position: absolute;
@@ -16,7 +16,11 @@ const RegenBtn = styled(Button)`
 `
 
 class Map extends React.Component {
-  state = { mapGrid: [], keyItems: [] }
+  state = {
+    mapGrid: [],
+    keyItems: [],
+    rooms: [],
+  }
 
   componentDidMount() {
     this.newMap()
@@ -24,14 +28,13 @@ class Map extends React.Component {
 
   newMap = () => {
     const { rows, columns } = this.props
-    const mapGrid = createMap({
-      rows,
-      columns,
-      maxTunnels: 50,
-      maxLength: 5,
-    })
+    const { mapGrid, rooms } = createMap({ rows, columns })
     const keyItems = getMapKeyItems(mapGrid)
-    this.setState({ mapGrid, keyItems })
+    this.setState({ mapGrid, rooms, keyItems })
+  }
+
+  openADoor = room => {
+    // addRoomToMap()
   }
 
   render() {

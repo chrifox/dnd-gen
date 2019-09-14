@@ -9,16 +9,19 @@ export const theme = {
   },
   tileColors: {
     floor: '#aaa',
-    // passage: '#28c',
+    passage: '#765',
+    chamber: '#648',
+    trap: '#a13',
+    water: '#356',
     start: '#292',
-    end: '#922',
-    empty: '#222', // default
+    end: '#900',
+    empty: '#333', // default
   },
   borderColors: {
     door: '#732',
-    secretDoor: '#15d',
-    wall: '#555',
-    grid: '#222', // default
+    secretDoor: '#113',
+    wall: '#000',
+    grid: '#333', // default
   },
   zIndex: {
     menuButton: 11,

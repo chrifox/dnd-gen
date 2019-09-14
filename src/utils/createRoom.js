@@ -1,6 +1,7 @@
 import { createTile } from './createTile'
+import { addDoors } from './addDoors'
 
-export const createRoom = ({ rows, columns, doors, secretDoor }) => {
+export const createRoom = ({ rows, columns, doors, secretDoor, trap }, type = 1) => {
   // initialise a room
   let room = []
 
@@ -17,55 +18,20 @@ export const createRoom = ({ rows, columns, doors, secretDoor }) => {
         right: isRight,
         bottom: isBottom,
         left: isLeft,
-        type: 1,
+        type: trap ? 3 : type,
+        row,
+        column: col,
       })
       room[row].push(tile)
     }
   }
-  room = placeDoors(room, doors, secretDoor)
-  return room
-}
 
-const placeDoors = (room, doors, secretDoor) => {
-  let chosenDoors = [],
-  edges = [],
-  random = 0
+  const roomWithDoors = addDoors(room, doors, secretDoor)
 
-  room.map((row, rowIndex) =>
-    row.filter((tile, tileIndex) => {
-      if (tile.top || tile.right || tile.bottom || tile.left) {
-        edges.push({ rowIndex, tileIndex })
-      }
-    })
-  )
-
-  for (let door = 0; door < doors; door++) {
-    // choose a random edge tile
-    random = Math.floor(Math.random() * edges.length)
-    // select tile for a door
-    chosenDoors.push(edges[random])
-    // remove edge tile after they have been used
-    edges.pop(edges[random])
+  const output = {
+    roomTiles: roomWithDoors.room,
+    doors: roomWithDoors.doors,
   }
 
-  if (secretDoor && Math.random() < secretDoor) {
-    random = Math.floor(Math.random() * edges.length)
-    chosenDoors.push({
-      ...edges[random],
-      secret: true,
-    })
-  }
-
-  chosenDoors.map(({ rowIndex, tileIndex, secret }) => {
-    const tile = room[rowIndex][tileIndex]
-    const { top, right, bottom, left } = tile
-
-    let side = Object.entries({ top, right, bottom, left })
-      .filter(([key, value]) => value && key)
-    side = side[Math.floor(Math.random() * side.length)]
-
-    secret ? tile.secretDoor = side[0] : tile.door = side[0]
-  })
-
-  return room
+  return output
 }

@@ -8,4 +8,5 @@ export const doors = [
   // Stairs
 
   // False door with trap
+  { rows: 1, columns: 1, trap: true }
 ]

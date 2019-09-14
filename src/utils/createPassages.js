@@ -2,7 +2,7 @@ import { randomRoom, createTile } from './'
 import { passages } from '../resources'
 
 export const createPassages = (
-  { currentRow, currentColumn },
+  startTile,
   { map, rows, columns },
   passagesLength,
   roomTiles,
@@ -15,8 +15,6 @@ export const createPassages = (
   currentDirection = [],
   roomEdges = [], // array of edge tiles in current room
   startingEdge // tile to start current passage on
-
-  const roomTopLeft = { currentRow, currentColumn }
 
   // get all edges of current room
   roomTiles.map((row, rowIndex) =>
@@ -43,6 +41,8 @@ export const createPassages = (
 
   for (let p = 0; p < passagesLength; p++) {
     let currentTile,
+    currentRow = startTile.row,
+    currentColumn = startTile.column,
     doorTiles = []
 
     currentPassage = randomRoom(passages, true)
@@ -98,7 +98,9 @@ export const createPassages = (
           bottom: movingHorizontally,
           left: movingVertically,
           right: movingVertically,
-          type: 1,
+          type: 2,
+          row: currentRow,
+          column: currentColumn,
         })
 
         // Add border to end of passage
@@ -129,9 +131,14 @@ export const createPassages = (
       }
     }
     // Reset current tile to starting position
-    currentRow = roomTopLeft.currentRow
-    currentColumn = roomTopLeft.currentColumn
+    currentRow = startTile.row
+    currentColumn = startTile.column
   }
 
-  return map
+  const output = {
+    map,
+    passages,
+  }
+
+  return output
 }

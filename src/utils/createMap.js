@@ -1,24 +1,36 @@
 import {
-  create2dArray,
+  createBlankMap,
+  randomRoom,
   createRoom,
   createTile,
-  randomRoom,
   createPassages,
+  createRoomBehindDoor,
+  addRoomToMap,
 } from './'
 import { startingAreas } from '../resources'
 
 export const createMap = ({ rows, columns }) => {
-  // generate empty map
-  let map = create2dArray(rows, columns, createTile({ type: 0 })),
-  // start at a random row
+  // Generate empty map
+  let map = createBlankMap(rows, columns),
+
+  // start at a random row * column
   currentRow = Math.floor(Math.random() * rows),
-  // start at a random column
   currentColumn = Math.floor(Math.random() * columns),
-  mapWithPassages = []
+
+  // list room objects
+  rooms = []
+  // eg: {
+  //   door: { row, column, side }, // NOTE: door only if room has come from a door
+  //   room: { grid: 2dArray of tiles, visible: false },
+  // }
+
 
   // generate starting area
   const startArea = randomRoom(startingAreas)
-  const startingAreaTiles = createRoom(startArea)
+  const startingAreaRoom = createRoom(startArea)
+
+  // add starting area to rooms
+  rooms.push({ ...startingAreaRoom, visible: true })
 
   // adjust current position to fit chosen starting area
   // Prevent spawning within 10 tiles from edge
@@ -35,21 +47,20 @@ export const createMap = ({ rows, columns }) => {
   // store starting tile for styling later
   const startTile = { row: currentRow, column: currentColumn }
 
-  // update map with chosen starting area
-  if (map) {
-    for (let row = 0; row < startArea.rows; row++) {
-      for (let col = 0; col < startArea.columns; col ++) {
-        map[currentRow + row][currentColumn + col] = {
-          ...startingAreaTiles[row][col],
-          row: currentRow + row,
-          column: currentColumn + col,
-        }
-      }
-    }
-  }
-
+  // Starting Area
+  map = addRoomToMap(startTile, map, startArea, startingAreaRoom.roomTiles)
   // create any passages off from starting area
-  map = createPassages({ currentRow, currentColumn }, { map, rows, columns }, startArea.passages, startingAreaTiles)
+  const startWithPassages = createPassages(startTile, { map, rows, columns }, startArea.passages, startingAreaRoom.roomTiles)
+  map = startWithPassages.map
+
+  // TODO: add passages to map rooms
+
+  // generate additional spaces from any doors
+  startingAreaRoom.doors.map(d => {
+    const { newMap, room } = createRoomBehindDoor(startTile, map, d)
+    // map = newMap
+    rooms.push(room)
+  })
 
   // set start tile color
   // map[startTile.row][startTile.column].type = 's'
@@ -57,5 +68,10 @@ export const createMap = ({ rows, columns }) => {
   // set end tile color
   // map[currentRow][currentColumn] = 'e'
 
-  return map
+  const output = {
+    mapGrid: map,
+    rooms: rooms,
+  }
+
+  return output
 }
