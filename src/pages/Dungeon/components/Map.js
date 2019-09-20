@@ -62,6 +62,10 @@ class Map extends React.Component {
   render() {
     const { rows, columns, keyOpen } = this.props
     const { mapGrid, keyItems } = this.state
+    const cameraContainerSize = {
+      height: 600,
+      width: 900,
+    }
     const contentSize = {
       height: rows * (TILE_SIZE + BORDER_WIDTH * 2),
       width: columns * (TILE_SIZE + BORDER_WIDTH * 2),
@@ -70,7 +74,7 @@ class Map extends React.Component {
       <>
         <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
 
-        <Camera contentSize={contentSize}>
+        <Camera containerSize={cameraContainerSize} contentSize={contentSize}>
           {mapGrid.map((row, rowIndex) => (
             <Row length={row.length} key={rowIndex}>
               {row.map(({ type, ...options }, colIndex) =>

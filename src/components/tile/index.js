@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 20 // 1 tile = 5ft
+export const TILE_SIZE = 28 // 1 tile = 5ft
 export const BORDER_WIDTH = 1
 const directions = ['top', 'right', 'bottom', 'left']
 
@@ -73,12 +73,7 @@ const tileBorderWidth = props => {
     `, '')
 }
 
-const borderColor = (props, dir) => {
-  // if (props[dir] && (props.door === dir)) return 'door'
-  // if (props[dir] && (props.secretDoor === dir)) return 'secretDoor'
-  if (props[dir]) return 'wall'
-  return 'grid'
-}
+const borderColor = (props, dir) => (props[dir]) ? 'wall' : 'grid'
 
 const tileBorderColor = props => {
   return directions.reduce((style, dir) =>
@@ -99,7 +94,7 @@ const tileBackground = props => {
   switch (tileStyles(props)) {
     case 'floor':
     case 'passage':
-      return image = imageBase(`tiles${Math.ceil(Math.random() * 9)}.jpg`)
+      return image = imageBase(`tiles${props.tileBg}.jpg`)
     case 'trap':
       return image = imageBase('trap.jpg')
   }

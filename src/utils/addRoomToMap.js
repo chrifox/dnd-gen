@@ -1,3 +1,5 @@
+import { createTile } from './'
+
 export const addRoomToMap = (map, { position, room, roomTiles }) => {
   let newMap = [].concat(map)
   const currentRow = position.row
@@ -8,11 +10,11 @@ export const addRoomToMap = (map, { position, room, roomTiles }) => {
     for (let col = 0; col < room.columns; col ++) {
       const currentTile = map[currentRow + row][currentColumn + col]
       newMap[currentRow + row][currentColumn + col] = currentTile.type === 0
-        ? {
+        ? createTile({
           ...roomTiles[row][col],
           row: currentRow + row,
           column: currentColumn + col,
-        } : currentTile
+        }) : currentTile
     }
   }
 

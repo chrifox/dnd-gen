@@ -4,6 +4,11 @@ import { PageLayout } from '../../components/layout'
 import { H3 } from '../../components/typography'
 import Map from './components/Map'
 
+const CenterContent = styled(PageLayout)`
+  justify-content: center;
+  min-height: 100vh;
+`
+
 const Menu = styled.div`
   position: absolute;
   top: 50%;
@@ -28,7 +33,7 @@ const Control = styled.div`
 `
 
 class Dungeon extends React.Component {
-  state = { keyOpen: false, menuOpen: false, rows: 30, columns: 50 }
+  state = { keyOpen: false, menuOpen: false, rows: 30, columns: 40 }
 
   componentDidMount() {
     document.addEventListener('keyup', this.keyPress, false)
@@ -54,7 +59,7 @@ class Dungeon extends React.Component {
   render() {
     const { rows, columns, menuOpen, keyOpen } = this.state
     return (
-      <PageLayout>
+      <CenterContent>
         <Map rows={rows} columns={columns} keyOpen={keyOpen} />
 
         <Menu open={menuOpen}>
@@ -69,7 +74,7 @@ class Dungeon extends React.Component {
             <input name="columns" type="number" value={columns} onChange={this.updateDimensions} />
           </Control>
         </Menu>
-      </PageLayout>
+      </CenterContent>
     )
   }
 }

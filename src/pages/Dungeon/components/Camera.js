@@ -41,6 +41,7 @@ const overlayPosition = ({ direction }) => {
 const Overlay = styled.div`
   position: absolute;
   z-index: ${props => props.theme.zIndex.overlay};
+  background: rgba(100,0,0,0.3);
   ${overlayPosition};
 `
 
@@ -55,57 +56,65 @@ const Content = styled.div`
 
 class Camera extends React.Component {
   state = {
-    width: 0,
-    height: 0,
     translateX: 0,
     translateY: 0,
   }
 
   componentDidMount() {
-    this.updateWindowDimensions()
     window.addEventListener('resize', this.updateWindowDimensions)
-  }
-
-  componentDidUpdate(prevState) {
-    if (prevState.translateY !== this.state.translateY) console.log('y',this.state.translateY)
-    if (prevState.translateX !== this.state.translateX) console.log('x',this.state.translateX)
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions)
   }
 
-  updateWindowDimensions = () => this.setState({ width: window.innerWidth, height: window.innerHeight })
-
-  updateTranslate = direction => {
-    const { width, height } = this.props.contentSize
-    if (direction === 'top' && (this.state.translateY < MOVE_AMOUNT)) {
-      this.setState(state => ({ translateY: Math.min(0, state.translateY + MOVE_AMOUNT) }))
-    }
-    if (direction === 'left' && (this.state.translateX < MOVE_AMOUNT)) {
-      this.setState(state => ({ translateX: Math.min(0, state.translateX + MOVE_AMOUNT) }))
-    }
-    if (direction === 'bottom' && (this.state.translateY > this.state.height - height)) {
-      this.setState(state => ({ translateY: Math.max(state.translateY - MOVE_AMOUNT, this.state.height - height) }))
-    }
-    if (direction === 'right' && (this.state.translateX > this.state.width - width)) {
-      this.setState(state => ({ translateX: Math.max(state.translateX - MOVE_AMOUNT, this.state.width - width) }))
-    }
-  }
-
   onMouseEnterOverlay = direction => {
-    this.translate = setInterval(() => this.updateTranslate(direction), 50)
+    this.handleTranslate(direction)
   }
 
   onMouseExitOverlay = direction => {
     clearInterval(this.translate)
   }
 
+  repeatTranslate = direction => {
+    this.translate = setInterval(() => this.updateTranslate(direction), 50)
+  }
+
+  handleTranslate = direction => {
+    const { containerSize, contentSize } = this.props
+    const { translateX, translateY } = this.state
+    if (
+      (direction === 'top' && (translateY < MOVE_AMOUNT)) ||
+      (direction === 'left' && (translateX < MOVE_AMOUNT)) ||
+      (direction === 'bottom' && (translateY > containerSize.height - contentSize.height)) ||
+      (direction === 'right' && (translateX > containerSize.width - contentSize.width))
+    ) {
+      this.repeatTranslate(direction)
+    }
+  }
+
+  updateTranslate = direction => {
+    const { containerSize, contentSize } = this.props
+    this.setState(state => {
+      switch (direction) {
+        case 'top':
+          return { translateY: Math.min(0, state.translateY + MOVE_AMOUNT) }
+        case 'left':
+          return { translateX: Math.min(0, state.translateX + MOVE_AMOUNT) }
+        case 'bottom':
+          return { translateY: Math.max(state.translateY - MOVE_AMOUNT, containerSize.height - contentSize.height) }
+        case 'right':
+          return { translateX: Math.max(state.translateX - MOVE_AMOUNT, containerSize.width - contentSize.width) }
+        default: return state
+      }
+    })
+  }
+
   render() {
-    const { width, height, translateX, translateY } = this.state
-    console.log(width, this.props.contentSize.width)
+    const { containerSize } = this.props
+    const { translateX, translateY } = this.state
     return (
-      <Container width={width} height={height}>
+      <Container {...containerSize}>
         <Content translateX={translateX} translateY={translateY}>
           {this.props.children}
         </Content>
@@ -114,8 +123,8 @@ class Camera extends React.Component {
           <Overlay
             key={dir}
             direction={dir}
-            onMouseEnter={() => this.onMouseEnterOverlay(dir)}
-            onMouseLeave={() => this.onMouseExitOverlay(dir)}
+            onMouseDown={() => this.onMouseEnterOverlay(dir)}
+            onMouseUp={() => this.onMouseExitOverlay(dir)}
           />
         ))}
       </Container>

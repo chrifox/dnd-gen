@@ -2,7 +2,6 @@ import {
   createBlankMap,
   randomRoom,
   createRoom,
-  createTile,
   createPassages,
   createRoomBehindDoor,
   addRoomToMap,

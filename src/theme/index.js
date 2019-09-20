@@ -19,7 +19,7 @@ export const theme = {
   },
   borderColors: {
     door: '#732',
-    secretDoor: '#113',
+    secretDoor: '#334',
     wall: '#000',
     grid: '#333', // default
   },
