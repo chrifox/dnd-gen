@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { TILE_SIZE, BORDER_WIDTH } from '../../../components/tile'
 
-const MOVE_AMOUNT = TILE_SIZE + BORDER_WIDTH * 2
+const MOVE_AMOUNT = (TILE_SIZE + BORDER_WIDTH * 2) / 2
 const directions = ['top','bottom','left','right']
 
 const Container = styled.div`
@@ -41,7 +41,7 @@ const overlayPosition = ({ direction }) => {
 const Overlay = styled.div`
   position: absolute;
   z-index: ${props => props.theme.zIndex.overlay};
-  background: rgba(100,0,0,0.3);
+  // background: rgba(100,0,0,0.3);
   ${overlayPosition};
 `
 
@@ -61,19 +61,31 @@ class Camera extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.updateWindowDimensions)
+    window.addEventListener('keydown', this.keyDown, false)
+    window.addEventListener('keyup', this.onMouseUpOverlay, false)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions)
+    window.removeEventListener('keydown', this.keyDown, false)
+    window.removeEventListener('keyup', this.onMouseUpOverlay, false)
   }
 
-  onMouseEnterOverlay = direction => {
+  onMouseDownOverlay = direction => {
+    clearInterval(this.translate)
     this.handleTranslate(direction)
   }
 
-  onMouseExitOverlay = direction => {
+  onMouseUpOverlay = () => {
     clearInterval(this.translate)
+  }
+
+  keyDown = e => {
+    switch (e.keyCode) {
+      case 87: return this.onMouseDownOverlay('top')
+      case 83: return this.onMouseDownOverlay('bottom')
+      case 65: return this.onMouseDownOverlay('left')
+      case 68: return this.onMouseDownOverlay('right')
+    }
   }
 
   repeatTranslate = direction => {
@@ -123,8 +135,8 @@ class Camera extends React.Component {
           <Overlay
             key={dir}
             direction={dir}
-            onMouseDown={() => this.onMouseEnterOverlay(dir)}
-            onMouseUp={() => this.onMouseExitOverlay(dir)}
+            onMouseEnter={() => this.onMouseDownOverlay(dir)}
+            onMouseLeave={() => this.onMouseUpOverlay(dir)}
           />
         ))}
       </Container>
