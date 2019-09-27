@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import Button from '../../../components/Button'
 import MapKey, { getMapKeyItems } from '../../../components/MapKey'
@@ -6,6 +6,14 @@ import { Row } from '../../../components/map'
 import { Tile, TILE_SIZE, BORDER_WIDTH } from '../../../components/tile'
 import Camera from './Camera'
 import { createMap, addRoomToMap, createRoomBehindDoor } from '../../../utils'
+
+const RoomCounter = styled.div`
+  position: absolute;
+  top:0;
+  left: 0;
+  color: #fff;
+  font-size: 20px;
+`
 
 const RegenBtn = styled(Button)`
   position: absolute;
@@ -15,7 +23,7 @@ const RegenBtn = styled(Button)`
   transform: translateX(-50%);
 `
 
-class Map extends React.Component {
+class Map extends Component {
   state = {
     mapGrid: [],
     keyItems: [],
@@ -61,7 +69,7 @@ class Map extends React.Component {
 
   render() {
     const { rows, columns, keyOpen } = this.props
-    const { mapGrid, keyItems } = this.state
+    const { mapGrid, keyItems, roomCounter } = this.state
     const cameraContainerSize = {
       height: 600,
       width: 900,
@@ -71,7 +79,7 @@ class Map extends React.Component {
       width: columns * (TILE_SIZE + BORDER_WIDTH * 2),
     }
     return (
-      <>
+      <Fragment>
         <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
 
         <Camera containerSize={cameraContainerSize} contentSize={contentSize}>
@@ -90,7 +98,9 @@ class Map extends React.Component {
         </Camera>
 
         <MapKey items={keyItems} open={keyOpen} />
-      </>
+
+        <RoomCounter>{roomCounter}</RoomCounter>
+      </Fragment>
     )
   }
 }

@@ -52,17 +52,17 @@ class Navbar extends React.Component {
     const { open } = this.state
     return (
       <>
-      <Nav open={open}>
-        {links.map(({ key, to, label }) => (
-          <Link key={label} onClick={() => Router.push(to)}>
-            {label}
-          </Link>
-        ))}
-      </Nav>
+        <Nav open={open}>
+          {links.map(({ key, to, label }) => (
+            <Link key={label} onClick={() => Router.push(to)}>
+              {label}
+            </Link>
+          ))}
+        </Nav>
 
-      <MenuToggle onClick={this.toggleMenu} open={open}>
-        <SvgIcon name={open ? 'left' : 'right'} size={30} />
-      </MenuToggle>
+        <MenuToggle onClick={this.toggleMenu} open={open}>
+          <SvgIcon name={open ? 'left' : 'right'} size={30} />
+        </MenuToggle>
       </>
     )
   }

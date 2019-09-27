@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 28 // 1 tile = 5ft
+export const TILE_SIZE = 30 // 1 tile = 5ft
 export const BORDER_WIDTH = 1
 const directions = ['top', 'right', 'bottom', 'left']
 
@@ -25,16 +25,16 @@ const sizePosition = props => {
     top = 0
   }
   return `
-    width: ${TILE_SIZE * (doorVertical ? 1 : 0.5)}px;
-    height: ${TILE_SIZE * (doorHorizontal ? 1 : 0.5)}px;
+    width: ${TILE_SIZE * (doorVertical ? 1 : 0.25)}px;
+    height: ${TILE_SIZE * (doorHorizontal ? 1 : 0.25)}px;
     top: ${top}px;
     right: ${right}px;
     bottom: ${bottom}px;
     left: ${left}px;
     ${margin};
-    transition: 0.2s transform ease;
+    transition: transform ease 0.2s;
     &:hover {
-      transform: scale(2.5);
+      transform: scale(2);
     }
   `
 }
