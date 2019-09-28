@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Button from '../../../components/Button'
 import MapKey, { getMapKeyItems } from '../../../components/MapKey'
@@ -23,7 +23,7 @@ const RegenBtn = styled(Button)`
   transform: translateX(-50%);
 `
 
-class Map extends Component {
+class Map extends React.Component {
   state = {
     mapGrid: [],
     keyItems: [],
@@ -39,7 +39,7 @@ class Map extends Component {
     const { rows, columns } = this.props
     const { mapGrid, rooms } = createMap({ rows, columns })
     const keyItems = getMapKeyItems(mapGrid)
-    this.setState({ mapGrid, rooms, keyItems })
+    this.setState({ mapGrid, keyItems, rooms, roomCounter: 0 })
   }
 
   openADoor = door => {
@@ -79,7 +79,7 @@ class Map extends Component {
       width: columns * (TILE_SIZE + BORDER_WIDTH * 2),
     }
     return (
-      <Fragment>
+      <>
         <RegenBtn onClick={this.newMap}>Regenerate</RegenBtn>
 
         <Camera containerSize={cameraContainerSize} contentSize={contentSize}>
@@ -100,7 +100,7 @@ class Map extends Component {
         <MapKey items={keyItems} open={keyOpen} />
 
         <RoomCounter>{roomCounter}</RoomCounter>
-      </Fragment>
+      </>
     )
   }
 }

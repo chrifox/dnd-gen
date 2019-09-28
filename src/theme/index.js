@@ -8,14 +8,12 @@ export const theme = {
     text: '#efefef',
   },
   tileColors: {
-    floor: '#aaa',
-    passage: '#765',
-    chamber: '#648',
-    trap: '#a13',
-    water: '#356',
-    start: '#292',
-    end: '#900',
-    empty: '#333', // default
+    floor: '#aaa',   // 1
+    passage: '#765', // 2
+    trap: '#a13',    // 3
+    chamber: '#648', // 4
+    water: '#356',   // 5
+    empty: '#333',   // default (0)
   },
   borderColors: {
     door: '#732',

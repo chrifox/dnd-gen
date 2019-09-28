@@ -26,7 +26,7 @@ class Room extends React.Component {
   render() {
     const { room } = this.state
     return (
-      <div>
+      <>
         {room.map((row, rowIndex) => (
           <Row key={rowIndex}>
             {row.map(({ type, ...options }, colIndex) =>
@@ -41,7 +41,7 @@ class Room extends React.Component {
             )}
           </Row>
         ))}
-      </div>
+      </>
     )
   }
 }

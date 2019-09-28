@@ -4,8 +4,17 @@ import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
 export const TILE_SIZE = 30 // 1 tile = 5ft
-export const BORDER_WIDTH = 1
+export const BORDER_WIDTH = 2
 const directions = ['top', 'right', 'bottom', 'left']
+
+const openOrigin = door => {
+  switch (door) {
+    case 'top': return '0 100%'
+    case 'bottom': return '100% 0'
+    case 'left': return '100% 100%'
+    case 'right': return '0 0'
+  }
+}
 
 const sizePosition = props => {
   const door = props.door || props.secretDoor
@@ -25,16 +34,17 @@ const sizePosition = props => {
     top = 0
   }
   return `
-    width: ${TILE_SIZE * (doorVertical ? 1 : 0.25)}px;
-    height: ${TILE_SIZE * (doorHorizontal ? 1 : 0.25)}px;
+    width: ${TILE_SIZE * (doorVertical ? 1 : 0.4)}px;
+    height: ${TILE_SIZE * (doorHorizontal ? 1 : 0.4)}px;
     top: ${top}px;
     right: ${right}px;
     bottom: ${bottom}px;
     left: ${left}px;
     ${margin};
     transition: transform ease 0.2s;
+    transform-origin: ${openOrigin(door)};
     &:hover {
-      transform: scale(2);
+      transform: rotate(-30deg);
     }
   `
 }
@@ -55,8 +65,6 @@ const DoorButton = styled(Button)`
 
 const tileStyles = props => {
   switch (props.value) {
-    case 's': return 'start'
-    case 'e': return 'end'
     case 1: return 'floor'
     case 2: return 'passage'
     case 3: return 'trap'
@@ -66,14 +74,7 @@ const tileStyles = props => {
   }
 }
 
-const tileBorderWidth = props => {
-  return directions.reduce((style, dir) =>
-    `${style}
-      border-${dir}-width: ${BORDER_WIDTH * (props[dir] ? EDGE_MULTIPLIER : 1)}px;
-    `, '')
-}
-
-const borderColor = (props, dir) => (props[dir]) ? 'wall' : 'grid'
+const borderColor = (props, dir) => (!props[dir] || props.door === dir) ? 'grid' : 'wall'
 
 const tileBorderColor = props => {
   return directions.reduce((style, dir) =>

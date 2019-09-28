@@ -43,12 +43,8 @@ const Overlay = styled.div`
   ${overlayPosition};
 `
 
-const contentTranslate = ({ translateX, translateY }) => {
-  return `translate(${translateX}px, ${translateY}px)`
-}
-
 const Content = styled.div`
-  transform: ${contentTranslate};
+  transform: ${({ translateX, translateY }) => `translate(${translateX}px, ${translateY}px)`};
   transition: 0.1s all ease-out;
 `
 

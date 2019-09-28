@@ -2,34 +2,34 @@ import React, { useState, useEffect } from 'react'
 import { TILE_SIZE, BORDER_WIDTH } from '../components/tile'
 
 const MOVE_AMOUNT = (TILE_SIZE + BORDER_WIDTH * 2) / 2
+let translating
 
 export const useCameraControls = ({ containerSize, contentSize }) => {
-  let translating
   const [{ translateX, translateY }, setNewTranslate] = useState({ translateX: 0, translateY: 0 })
 
-  const updateTranslate = direction => setNewTranslate(() => {
+  const updateTranslate = direction => setNewTranslate(state => {
     switch (direction) {
       case 'top':
         return {
-          translateX,
-          translateY: Math.min(0, translateY + MOVE_AMOUNT),
+          translateX: state.translateX,
+          translateY: Math.min(0, state.translateY + MOVE_AMOUNT),
         }
       case 'bottom':
         return {
-          translateX,
-          translateY: Math.max(translateY - MOVE_AMOUNT, containerSize.height - contentSize.height),
+          translateX: state.translateX,
+          translateY: Math.max(state.translateY - MOVE_AMOUNT, containerSize.height - contentSize.height),
         }
       case 'left':
         return {
-          translateX: Math.min(0, translateX + MOVE_AMOUNT),
-          translateY,
+          translateX: Math.min(0, state.translateX + MOVE_AMOUNT),
+          translateY: state.translateY,
         }
       case 'right':
         return {
-          translateX: Math.max(translateX - MOVE_AMOUNT, containerSize.width - contentSize.width),
-          translateY,
+          translateX: Math.max(state.translateX - MOVE_AMOUNT, containerSize.width - contentSize.width),
+          translateY: state.translateY,
         }
-      default: return { translateX, translateY }
+      default: return { translateX: state.translateX, translateY: state.translateY }
     }
   })
 
@@ -44,8 +44,7 @@ export const useCameraControls = ({ containerSize, contentSize }) => {
       (direction === 'bottom' && (translateY > containerSize.height - contentSize.height)) ||
       (direction === 'right' && (translateX > containerSize.width - contentSize.width))
     ) {
-      // repeatTranslate(direction)
-      updateTranslate(direction)
+      repeatTranslate(direction)
     }
   }
 
@@ -54,9 +53,12 @@ export const useCameraControls = ({ containerSize, contentSize }) => {
     handleTranslate(direction)
   }
 
-  const onKeyUp = () => clearInterval(translating)
+  const onKeyUp = () => {
+    clearInterval(translating)
+  }
 
   const keyHandler = e => {
+    if (e.repeat) return false
     switch (e.keyCode) {
       case 87: return onKeyDown('top') // w
       case 83: return onKeyDown('bottom') // s
