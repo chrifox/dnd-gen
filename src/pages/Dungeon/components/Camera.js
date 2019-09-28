@@ -37,7 +37,9 @@ const overlayPosition = ({ direction }) => {
   `
 }
 
+// NOTE: Hidden overlays until they are being used
 const Overlay = styled.div`
+  display: none;
   position: absolute;
   z-index: ${props => props.theme.zIndex.overlay};
   ${overlayPosition};
