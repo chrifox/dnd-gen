@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components'
 import Button from '../Button'
 import SvgIcon from '../SvgIcon'
 
-export const TILE_SIZE = 30 // 1 tile = 5ft
-export const BORDER_WIDTH = 2
+export const TILE_SIZE = 28 // 1 tile = 5ft
+export const BORDER_WIDTH = 1
 const directions = ['top', 'right', 'bottom', 'left']
 
 const openOrigin = door => {

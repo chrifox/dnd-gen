@@ -19,7 +19,7 @@ export const theme = {
     door: '#732',
     secretDoor: '#334',
     wall: '#000',
-    grid: '#333', // default
+    grid: '#222', // default
   },
   zIndex: {
     menuButton: 11,
