@@ -71,8 +71,8 @@ class Map extends React.Component {
     const { rows, columns, keyOpen } = this.props
     const { mapGrid, keyItems, roomCounter } = this.state
     const cameraContainerSize = {
-      height: 600,
-      width: 900,
+      height: 640,
+      width: 960,
     }
     const contentSize = {
       height: rows * (TILE_SIZE + BORDER_WIDTH * 2),

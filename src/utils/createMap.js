@@ -9,10 +9,10 @@ import {
 import { startingAreas } from '../resources'
 
 export const createMap = ({ rows, columns }) => {
-  // Generate empty map
+  // Generate empty map 2d array
   let map = createBlankMap(rows, columns),
 
-  // start at a random row * column
+  // start at a random [row column]
   currentRow = Math.floor(Math.random() * rows),
   currentColumn = Math.floor(Math.random() * columns),
 
@@ -32,8 +32,8 @@ export const createMap = ({ rows, columns }) => {
   rooms.push({ ...startingAreaRoom, visible: true })
 
   // adjust current position to fit chosen starting area
-  // Prevent spawning within 10 tiles from edge
-  const DEAD_ZONE = 10
+  // also prevent spawning within 8 tiles from an edge
+  const DEAD_ZONE = 8
   if (currentRow + startArea.rows > rows - DEAD_ZONE) {
     currentRow -= startArea.rows + DEAD_ZONE
   }
@@ -63,15 +63,7 @@ export const createMap = ({ rows, columns }) => {
   // TODO: add passages to map rooms
 
   // generate additional spaces from any doors
-  startingAreaRoom.doors.map(d =>
-    rooms.push(createRoomBehindDoor(startTile, map, d))
-  )
-
-  // set start tile color
-  // map[startTile.row][startTile.column].type = 's'
-
-  // set end tile color
-  // map[currentRow][currentColumn] = 'e'
+  startingAreaRoom.doors.map(d => rooms.push(createRoomBehindDoor(startTile, map, d)))
 
   const output = {
     mapGrid: map,

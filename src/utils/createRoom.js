@@ -1,7 +1,7 @@
 import { createTile } from './createTile'
 import { addDoors } from './addDoors'
 
-export const createRoom = ({ rows, columns, doors, secretDoor, trap }, type = 1) => {
+export const createRoom = ({ rows, columns, doors, secretDoor, trap }, type = 1, direction) => {
   // initialise a room
   let room = []
 
@@ -26,7 +26,18 @@ export const createRoom = ({ rows, columns, doors, secretDoor, trap }, type = 1)
     }
   }
 
-  const roomWithDoors = addDoors(room, doors, secretDoor)
+  const directionFlip = dir => {
+    switch (dir) {
+      case 'top': return 'bottom'
+      case 'bottom': return 'top'
+      case 'left': return 'right'
+      case 'right': return 'left'
+    }
+  }
+
+  const preventDoors = directionFlip(direction)
+
+  const roomWithDoors = addDoors(room, doors, secretDoor, preventDoors)
 
   const output = {
     roomTiles: roomWithDoors.room,

@@ -44,7 +44,7 @@ const sizePosition = props => {
     transition: transform ease 0.2s;
     transform-origin: ${openOrigin(door)};
     &:hover {
-      transform: rotate(-30deg);
+      transform: rotate(-20deg);
     }
   `
 }

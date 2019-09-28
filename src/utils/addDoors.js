@@ -1,11 +1,16 @@
-export const addDoors = (room, doors, secretDoor) => {
+export const addDoors = (room, doors, secretDoor, preventDoors) => {
   let chosenDoors = [],
   edges = [],
   random = 0
 
   room.map((row, rowIndex) =>
     row.filter((tile, tileIndex) => {
-      if (tile.top || tile.right || tile.bottom || tile.left) {
+      if (
+        (tile.top && (preventDoors !== 'top')) ||
+        (tile.right && (preventDoors !== 'right')) ||
+        (tile.bottom && (preventDoors !== 'bottom')) ||
+        (tile.left && (preventDoors !== 'left'))
+      ) {
         edges.push({ rowIndex, tileIndex })
       }
     })

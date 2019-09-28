@@ -16,14 +16,14 @@ export const createRoomBehindDoor = (startTile, map, door) => {
   roomChoice,
   isSafe = false
 
-  const doorTile = { row: startRow, column: startColumn }
+  const doorTile = { row: startRow, column: startColumn, direction }
 
   // 50% chance to spawn a chamber
   spawnChamber = Math.random() < 0.5
   roomChoice = randomRoom(spawnChamber ? chambers : doors)
 
+  // Prevent new rooms going off map
   while (!isSafe) {
-    // Prevent new rooms going off map
     if (
       (startRow - roomChoice.rows < 0) ||
       (startRow + roomChoice.rows > rows - 1) ||
@@ -35,19 +35,26 @@ export const createRoomBehindDoor = (startTile, map, door) => {
       roomChoice = randomRoom(spawnChamber ? chambers : doors)
       break
     } else {
-      // NOTE: this currently moves all rooms in the same way
-      // TODO: should be more randomised
-      if (direction !== 'bottom') startRow -= roomChoice.rows
-      if (direction !== 'top') startRow += 1
-      if (direction !== 'right') startColumn -= roomChoice.columns
-      if (direction !== 'left') startColumn += 1
+      // Once safe move room to its start tile
+      if (direction === 'bottom') {
+        startRow += 1
+      }
+      if (direction === 'top') {
+        startRow -= roomChoice.rows
+      }
+      if (direction === 'right') {
+        startColumn += 1
+      }
+      if (direction === 'left') {
+        startColumn -= roomChoice.columns
+      }
       isSafe = true
     }
   }
 
   // TODO: Prevent overlapping existing tiles
 
-  const room = createRoom(roomChoice, spawnChamber ? 4 : 2)
+  const room = createRoom(roomChoice, spawnChamber ? 4 : 2, direction)
 
   const output = {
     doorTile,

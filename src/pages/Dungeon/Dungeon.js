@@ -18,7 +18,7 @@ const Dungeon = () => {
     <CenterContent>
       <Map
         rows={30}
-        columns={40}
+        columns={30}
         keyOpen={keyOpen}
       />
     </CenterContent>
