@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { TILE_SIZE, BORDER_WIDTH } from '../components/tile'
 
 const MOVE_AMOUNT = (TILE_SIZE + BORDER_WIDTH * 2) / 2

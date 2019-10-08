@@ -5,12 +5,11 @@ import { H3 } from '../typography'
 const Key = styled.div`
   background: ${props => props.theme.colors.backgroundDark};
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 0;
+  right: 0;
   display: ${props => props.open ? 'flex' : 'none'};
   flex-direction: column;
-  padding: 10px 40px;
-  border: 1px solid #ddd;
+  padding: 20px 40px 16px;
 `
 
 const Item = styled.div`
