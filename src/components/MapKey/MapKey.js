@@ -5,12 +5,11 @@ import { H3 } from '../typography'
 const Key = styled.div`
   background: ${props => props.theme.colors.backgroundDark};
   position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
+  top: 0;
+  right: 0;
+  display: ${props => props.open ? 'flex' : 'none'};
   flex-direction: column;
-  padding: 0 30px 10px 40px;
-  border: 1px solid #ddd;
+  padding: 20px 40px 16px;
 `
 
 const Item = styled.div`
@@ -27,8 +26,8 @@ const Label = styled.div`
   margin-left: 10px;
 `
 
-const MapKey = ({ items }) => (
-  <Key>
+const MapKey = ({ items, open }) => (
+  <Key open={open}>
     <H3>Legend</H3>
     {items.map(({ name, symbol, description }) => (
       <Item key={name}>

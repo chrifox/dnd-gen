@@ -19,16 +19,18 @@ export default class MyDocument extends Document {
           <>
             {initialProps.styles}
             {sheet.getStyleElement()}
-            <style global jsx>{`
-              body {
-                margin: 0;
-                font-family: 'Muli', sans-serif;
-                font-weight: 300;
-              }
-              * {
-                user-select: none;
-              }
-              `}</style>
+            <style global jsx>
+              {`
+                * {
+                  user-select: none;
+                }
+                body {
+                  margin: 0;
+                  font-family: 'Muli', sans-serif;
+                  font-weight: 300;
+                }
+              `}
+            </style>
           </>
         )
       }

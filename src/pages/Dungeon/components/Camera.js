@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TILE_SIZE, BORDER_WIDTH } from '../../../components/tile'
+import { useCameraControls } from '../../../hooks/camera'
 
-const MOVE_AMOUNT = TILE_SIZE + BORDER_WIDTH * 2
 const directions = ['top','bottom','left','right']
 
 const Container = styled.div`
@@ -38,84 +37,31 @@ const overlayPosition = ({ direction }) => {
   `
 }
 
+// NOTE: Hidden overlays until they are being used
 const Overlay = styled.div`
+  display: none;
   position: absolute;
   z-index: ${props => props.theme.zIndex.overlay};
   ${overlayPosition};
 `
 
-const contentTranslate = ({ translateX, translateY }) => {
-  return `translate(${translateX}px, ${translateY}px)`
-}
-
 const Content = styled.div`
-  transform: ${contentTranslate};
+  transform: ${({ translateX, translateY }) => `translate(${translateX}px, ${translateY}px)`};
   transition: 0.1s all ease-out;
-  padding: 0;
 `
 
-class Camera extends React.Component {
-  state = {
-    width: 0,
-    height: 0,
-    translateX: 0,
-    translateY: 0,
-  }
-
-  componentDidMount() {
-    this.updateWindowDimensions()
-    window.addEventListener('resize', this.updateWindowDimensions)
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions)
-  }
-
-  updateWindowDimensions = () => this.setState({ width: window.innerWidth, height: window.innerHeight })
-
-  updateTranslate = direction => {
-    const { width, height } = this.props.contentSize
-    if (direction === 'top' && (this.state.translateY < 0)) {
-      this.setState(state => ({ translateY: state.translateY + MOVE_AMOUNT }))
-    }
-    if (direction === 'left' && (this.state.translateX < 0)) {
-      this.setState(state => ({ translateX: state.translateX + MOVE_AMOUNT }))
-    }
-    if (direction === 'bottom' && (this.state.translateY > this.state.height - height)) {
-      this.setState(state => ({ translateY: state.translateY - MOVE_AMOUNT }))
-    }
-    if (direction === 'right' && this.state.translateX > this.state.width - width) {
-      this.setState(state => ({ translateX: state.translateX - MOVE_AMOUNT }))
-    }
-  }
-
-  onMouseEnterOverlay = direction => {
-    this.translate = setInterval(() => this.updateTranslate(direction), 50)
-  }
-
-  onMouseExitOverlay = direction => {
-    clearInterval(this.translate)
-  }
-
-  render() {
-    const { width, height, translateX, translateY } = this.state
+const Camera = ({ containerSize, contentSize, children }) => {
+    const cameraControls = useCameraControls({ containerSize, contentSize })
+    const { translateX, translateY } = cameraControls
     return (
-      <Container width={width} height={height}>
+      <Container {...containerSize}>
         <Content translateX={translateX} translateY={translateY}>
-          {this.props.children}
+          {children}
         </Content>
 
-        {directions.map(dir => (
-          <Overlay
-            key={dir}
-            direction={dir}
-            onMouseEnter={() => this.onMouseEnterOverlay(dir)}
-            onMouseLeave={() => this.onMouseExitOverlay(dir)}
-          />
-        ))}
+        {directions.map(dir => <Overlay key={dir} direction={dir} />)}
       </Container>
     )
-  }
 }
 
 export default Camera

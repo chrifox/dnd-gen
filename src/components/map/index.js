@@ -1,6 +1,4 @@
-import React, { useState } from 'react'
-import styled, { css } from 'styled-components'
-import { TILE_SIZE, BORDER_WIDTH } from '../tile'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   display: flex;

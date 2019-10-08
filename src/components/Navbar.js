@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Router from 'next/router'
 import Button from './Button'
@@ -33,26 +33,21 @@ const MenuToggle = styled(Button)`
   z-index: ${props => props.theme.zIndex.menuButton};
   top: 50%;
   left: ${props => props.open ? 200 : 0}px;
-  transform: translate(-60%,-50%);
+  transform: ${props => props.open ? 'translate(-50%,-50%);' : 'translate(-65%,-50%);'}
   transition: 0.2s all ease;
-  background: ${props => props.theme.colors.backgroundDark};
+  background: ${props => props.theme.colors.primary};
   border-radius: 50%;
-  padding: 10px;
+  padding: 0.5em;
   &:hover {
-    ${props => !props.open && `transform: translate(-30%, -50%);`}
+    transform: ${props => props.open ? 'translate(-50%,-50%) scale(1.2);' : 'translate(-20%, -50%);'}
   }
 `
 
-class Navbar extends React.Component {
-  state = { open: false }
-
-  toggleMenu = () => this.setState(state => ({ open: !state.open }))
-
-  render() {
-    const { open } = this.state
-    return (
-      <>
-      <Nav open={open}>
+const Navbar = () => {
+  const [menuOpen, toggleMenu] = useState(false)
+  return (
+    <>
+      <Nav open={menuOpen}>
         {links.map(({ key, to, label }) => (
           <Link key={label} onClick={() => Router.push(to)}>
             {label}
@@ -60,12 +55,11 @@ class Navbar extends React.Component {
         ))}
       </Nav>
 
-      <MenuToggle onClick={this.toggleMenu} open={open}>
-        <SvgIcon name={open ? 'left' : 'right'} size={30} />
+      <MenuToggle onClick={() => toggleMenu(!menuOpen)} open={menuOpen}>
+        <SvgIcon name={menuOpen ? 'left' : 'right'} size={36} />
       </MenuToggle>
-      </>
-    )
-  }
+    </>
+  )
 }
 
 export default Navbar
