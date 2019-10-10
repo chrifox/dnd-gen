@@ -11,11 +11,11 @@ export const createRoomBehindDoor = (startTile, map, door) => {
 
   let startRow = startTile.row + door.row,
   startColumn = startTile.column + door.column,
-  direction = door.door,
   spawnChamber,
   roomChoice,
   isSafe = false
 
+  const direction = door.door
   const doorTile = { row: startRow, column: startColumn, direction }
 
   // 50% chance to spawn a chamber
@@ -29,30 +29,34 @@ export const createRoomBehindDoor = (startTile, map, door) => {
       (startRow + roomChoice.rows > rows - 1) ||
       (startColumn - roomChoice.columns < 0) ||
       (startColumn + roomChoice.columns > columns - 1)
+      // TODO: prevent overlapping existing tiles
     ) {
       // 40% chance to spawn a chamber
       spawnChamber = Math.random() < 0.4
       roomChoice = randomRoom(spawnChamber ? chambers : doors)
       break
-    } else {
-      // Once safe move room to its start tile
-      if (direction === 'bottom') {
-        startRow += 1
-      }
-      if (direction === 'top') {
-        startRow -= roomChoice.rows
-      }
-      if (direction === 'right') {
-        startColumn += 1
-      }
-      if (direction === 'left') {
-        startColumn -= roomChoice.columns
-      }
-      isSafe = true
-    }
+    } else isSafe = true
   }
 
-  // TODO: Prevent overlapping existing tiles
+  if (isSafe) {
+    // Once safe move room to its start tile
+    if (direction === 'bottom') {
+      startRow += 1
+      // TODO: setup column placement
+    }
+    if (direction === 'top') {
+      startRow -= roomChoice.rows
+      // TODO: setup column placement
+    }
+    if (direction === 'right') {
+      startColumn += 1
+      // TODO: setup row placement
+    }
+    if (direction === 'left') {
+      startColumn -= roomChoice.columns
+      // TODO: setup row placement
+    }
+  }
 
   const room = createRoom(roomChoice, spawnChamber ? 4 : 2, direction)
 
