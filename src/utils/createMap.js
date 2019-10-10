@@ -1,3 +1,6 @@
+// create the preliminary map, this consists of
+// the starting area with any initial passages and doors
+
 import {
   createTile,
   randomRoom,
@@ -18,10 +21,6 @@ export const createMap = ({ rows, columns }) => {
 
   // list of rooms
   rooms = []
-  // eg: {
-  //   door: { row, column, side }, // NOTE: door only if room has come from a door
-  //   room: { grid: 2dArray of tiles, visible: false },
-  // }
 
   // create shape of map as 2D array
   for (var row = 0; row < rows; row++) {
@@ -54,21 +53,17 @@ export const createMap = ({ rows, columns }) => {
   // store starting tile
   const startTile = { row: currentRow, column: currentColumn }
 
-  // Starting Area
-  map = addRoomToMap(
-    map,
-    {
+  // add starting area once it is finalised
+  map = addRoomToMap(map, {
       position: startTile,
       room: startArea,
       roomTiles: startingAreaRoom.roomTiles,
     }
   )
 
-  // create any passages off from starting area
+  // create any passages coming off from starting area
   const startWithPassages = createPassages(startTile, { map, rows, columns }, startArea.passages, startingAreaRoom.roomTiles)
   map = startWithPassages.map
-
-  // TODO: add passages to all map rooms
 
   // generate additional spaces from any doors
   startingAreaRoom.doors.map(d => rooms.push(createRoomBehindDoor(startTile, map, d)))
